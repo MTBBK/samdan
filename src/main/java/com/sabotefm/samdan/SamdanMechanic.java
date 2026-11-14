@@ -8,13 +8,15 @@ import com.googlecode.lanterna.gui2.table.TableModel;
 
 public class SamdanMechanic {
 
-	// Load book table data
+    // Load book table data
     public static void loadBookArchive(TableModel<String> tableModel) {
         tableModel.clear();
-        // TODO: Replace with SQLite database queries for KİTAP TABLOSU, YAZAR TABLOSU, etc.
+        // TODO: Replace with MySQL database queries for KİTAP TABLOSU, YAZAR TABLOSU,
+        // etc.
         tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
         tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali", "Yapı Kredi", "Roman", "160");
-        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman", "396");
+        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman",
+                "396");
     }
 
     // Handle book search functionality
@@ -28,10 +30,10 @@ public class SamdanMechanic {
                     .showDialog(gui);
             return;
         }
-        // TODO: Query SQLite database matching name, author, or ISBN
+        // TODO: Query MySQL database matching name, author, or ISBN
         new MessageDialogBuilder()
                 .setTitle("Arama Sonucu")
-                .setText("Aranan kelime: '" + query + "'\n(SQLite veritabanı sorgusu buraya bağlanacak)")
+                .setText("Aranan kelime: '" + query + "'\n(MySQL veritabanı sorgusu buraya bağlanacak)")
                 .addButton(MessageDialogButton.OK)
                 .build()
                 .showDialog(gui);
@@ -68,7 +70,7 @@ public class SamdanMechanic {
                     .showDialog(gui);
             return;
         }
-        // TODO: Query KÜTÜPHANEDE BULUNMA TABLOSU from SQLite
+        // TODO: Query KÜTÜPHANEDE BULUNMA TABLOSU from MySQL
         new MessageDialogBuilder()
                 .setTitle("Ariyet Durumu")
                 .setText("Seçilen kitabın bulunduğu kütüphaneler sorgulanıyor...\n(ISBN: " + selectedIsbn + ")")
