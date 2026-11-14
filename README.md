@@ -7,5 +7,5 @@
 3- `mvn clean compile`
 4- `mvn exec:java`
 
-Codes are at `/src/main/java/com/sabotefm/samdan`.
+Codebase is at `/src/main/java/com/sabotefm/samdan`.
 
