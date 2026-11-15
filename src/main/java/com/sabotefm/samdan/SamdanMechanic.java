@@ -7,16 +7,64 @@ import com.googlecode.lanterna.gui2.table.TableModel;
 import java.sql.*;
 
 public class SamdanMechanic {
+	
+	//Getters
+	
+	//UserName
+	public static String getUserName(){
+		return "Emre Karaduman";
+	}
+	
+	//Authorization
+	public static String getAuthorization(){
+		return "Admin";
+	}
+	
+	//BookName
+	public static String getBookName(){
+		return "Bir Sanatçının Hayatı \"Emre Karaduman\"";
+	}
+	
+	
+	
+	//Login
+	public static void loginToSamdan(String userName, String passWord){
+		SamdanDashboard.showDashboard();
+	}
+	
+	//Send Ratings
+	public static void saveRatings(int points, String evalution){
+		//Save ratings
+	}
 
-    // Load book table data
+    //Load book table data
     public static void loadBookArchive(TableModel<String> tableModel) {
         tableModel.clear();
         // TODO: Replace with MySQL database queries for KİTAP TABLOSU, YAZAR TABLOSU,
         // etc.
         tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
         tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali", "Yapı Kredi", "Roman", "160");
-        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman",
-                "396");
+        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman","396");
+    }
+    
+	//Load ratings table data for users
+    public static void loadRatingsTableForUsers(TableModel<String> tableModel) {
+        tableModel.clear();
+        // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR TABLOSU,
+        // etc.
+        tableModel.addRow("Nutuk", "8/10", "Tarihiydi");
+		tableModel.addRow("Kestane Gürgen Palamut", "7/10", "Altı Yaprak Üstü Bulut");
+        tableModel.addRow("Kürk Mantadolu Madonna", "6/10", "Sabahattin Aliliydi");
+    }
+    
+    //Load ratings table data for a single book
+    public static void loadRatingsTableForABook(TableModel<String> tableModel) {
+        tableModel.clear();
+        // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR TABLOSU,
+        // etc.
+        tableModel.addRow("Emre Karaduman", "8/10", "no way");
+		tableModel.addRow("Melih Efe Tursun", "7/10", "Çok iyi");
+        tableModel.addRow("Osman Kuru", "6/10", "Osman");
     }
 
     // Handle book search functionality
