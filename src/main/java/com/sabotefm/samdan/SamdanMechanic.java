@@ -20,11 +20,31 @@ public class SamdanMechanic {
 		return "Admin";
 	}
 	
-	//BookName
-	public static String getBookName(){
+	//Book Informations
+	//Book Name
+	public static String getBookName(String selectedIsbn){
 		return "Bir Sanatçının Hayatı \"Emre Karaduman\"";
 	}
-	
+	//Writer Name
+	public static String getWriterName(String selectedIsbn){
+		return "Melih Efe Tursun";
+	}
+	//Publisher Name
+	public static String getPublisherName(String selectedIsbn){
+		return "Osman Kuru Yayınları";
+	}
+	//Library Name
+	public static String getLibraryName(String selectedIsbn){
+		return "İskenderiye Kütüphanesi";
+	}
+	//Book Type
+	public static String getTypeName(String selectedIsbn){
+		return "Roman";
+	}
+	//Page Count
+	public static String getPageCount(String selectedIsbn){
+		return "18";
+	}
 	
 	
 	//Login
@@ -33,7 +53,7 @@ public class SamdanMechanic {
 	}
 	
 	//Send Ratings
-	public static void saveRatings(int points, String evalution){
+	public static void saveRatings(String selectedIsbn, int points, String evalution){
 		//Save ratings
 	}
 
@@ -58,7 +78,7 @@ public class SamdanMechanic {
     }
     
     //Load ratings table data for a single book
-    public static void loadRatingsTableForABook(TableModel<String> tableModel) {
+    public static void loadRatingsTableForABook(TableModel<String> tableModel, String selectedIsbn) {
         tableModel.clear();
         // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR TABLOSU,
         // etc.
@@ -68,8 +88,8 @@ public class SamdanMechanic {
     }
 
     // Handle book search functionality
-    public static void searchBooks(WindowBasedTextGUI gui, String query, TableModel<String> tableModel) {
-        if (query == null || query.trim().isEmpty()) {
+    public static void searchBooks(WindowBasedTextGUI gui, TableModel<String> tableModel, String arananKelime, int seciliFiltre, int seciliKitapTuru) {
+        if (arananKelime == null || arananKelime.trim().isEmpty()) {
             new MessageDialogBuilder()
                     .setTitle("Uyarı")
                     .setText("Lütfen aranacak bir kelime veya ISBN girin.")
@@ -78,13 +98,29 @@ public class SamdanMechanic {
                     .showDialog(gui);
             return;
         }
-        // TODO: Query MySQL database matching name, author, or ISBN
-        new MessageDialogBuilder()
-                .setTitle("Arama Sonucu")
-                .setText("Aranan kelime: '" + query + "'\n(MySQL veritabanı sorgusu buraya bağlanacak)")
-                .addButton(MessageDialogButton.OK)
-                .build()
-                .showDialog(gui);
+        else{
+			tableModel.clear();
+			//TODO: Query MySQL database matching name, author, or ISBN
+			//arananKelime -> Aranan Kelime String
+			
+			//Seçili Filtre:
+			//0-Kitap Adı
+			//1-Yazar
+          	//2-Yayınevi
+          	//3-Kütüphane
+          	
+          	//Secili Kitap Turu:
+          	//0-Hepsi
+          	//1-Roman
+          	//2-Hikaye
+          	//3-Şiir
+         	//4-Destan
+         	
+			tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
+			tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
+			tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
+			tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
+		}	
     }
 
     // Handle marking a book as acquired by the user (Kitap Edinme)
@@ -99,6 +135,8 @@ public class SamdanMechanic {
             return;
         }
         // TODO: Insert/Update record in user ownership database relation
+        
+        //Kitabı kişiye ekle
         new MessageDialogBuilder()
                 .setTitle("Başarılı")
                 .setText("Seçilen kitap (ISBN: " + selectedIsbn + ") edindiğiniz olarak işaretlendi.")
@@ -107,8 +145,8 @@ public class SamdanMechanic {
                 .showDialog(gui);
     }
 
-    // Check which library holds the book for borrowing (Ariyet)
-    public static void checkLibraryLocation(WindowBasedTextGUI gui, String selectedIsbn) {
+    // Check who owns the book right now (Ariyet)
+    public static void checkWhoOwns(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
             new MessageDialogBuilder()
                     .setTitle("Seçim Hatası")
@@ -118,10 +156,22 @@ public class SamdanMechanic {
                     .showDialog(gui);
             return;
         }
-        // TODO: Query KÜTÜPHANEDE BULUNMA TABLOSU from MySQL
+        // TODO: Query ARİYET TABLOSU from MySQL
+        
+        //Kitabın kime ait olduğu
+        String ownerOfTheBook = "Ahmet";
+        
+        //Eğer Sahibi Varsa
+        String messageToShow = "Seçilen " + selectedIsbn + " ISBN numaralı kitap, " + ownerOfTheBook + " adlı şahsın elinde (Onu Kurtar)";
+		
+		//Eğer Sahibi Yoksa
+		messageToShow = "Seçilen " + selectedIsbn + " ISBN numaralı kitap, kimsede değil merak etme git ve kütüphaneden al";
+		
+		
+		//Mesaj Göster
         new MessageDialogBuilder()
                 .setTitle("Ariyet Durumu")
-                .setText("Seçilen kitabın bulunduğu kütüphaneler sorgulanıyor...\n(ISBN: " + selectedIsbn + ")")
+                .setText(messageToShow)
                 .addButton(MessageDialogButton.OK)
                 .build()
                 .showDialog(gui);
@@ -139,11 +189,30 @@ public class SamdanMechanic {
             return;
         }
         // TODO: Query reviews/comments table for this book
+        
+        //Değerlendirme Yoksa Bu Koşul
         new MessageDialogBuilder()
                 .setTitle("Değerlendirmeler")
                 .setText("Bu kitap için henüz yorum girilmemiş.\n(ISBN: " + selectedIsbn + ")")
                 .addButton(MessageDialogButton.OK)
                 .build()
                 .showDialog(gui);
+                
+        //Değerlendirme varsa bu koşul
+        SamdanDegerlendirmeler.showDegerlendirmeler(selectedIsbn);
     }
+    
+    //Go to Book Information Page
+	public static void openBookInformation(WindowBasedTextGUI gui, String selectedIsbn){
+		if (selectedIsbn == null) {
+            new MessageDialogBuilder()
+                    .setTitle("Seçim Hatası")
+                    .setText("Lütfen tablodan bir kitap seçin.")
+                    .addButton(MessageDialogButton.OK)
+                    .build()
+                    .showDialog(gui);
+            return;
+        }
+		SamdanKitap.showKitap(selectedIsbn);
+	}
 }

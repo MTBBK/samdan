@@ -47,8 +47,8 @@ public class SamdanKullanici {
 
             Panel mainPanel = new Panel(new GridLayout(1));
 			
-			Label kullaniciAdi = new Label("Kullanıcı Adı: " + SamdanMechanic.getUserName()).addTo(mainPanel);
-			Label kullaniciYetkisi = new Label("Yetki: " + SamdanMechanic.getAuthorization()).addTo(mainPanel);
+			new Label("Kullanıcı Adı: " + SamdanMechanic.getUserName()).addTo(mainPanel);
+			new Label("Yetki: " + SamdanMechanic.getAuthorization()).addTo(mainPanel);
 			
 			mainPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(2)));
 			

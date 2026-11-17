@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 public class SamdanDegerlendirmeler {
 
-    public static void showDegerlendirmeler() {
+    public static void showDegerlendirmeler(String selectedIsbn) {
         try {
             Terminal terminal = new DefaultTerminalFactory().createTerminal();
             Screen screen = new TerminalScreen(terminal);
@@ -48,12 +48,11 @@ public class SamdanDegerlendirmeler {
 
             Panel mainPanel = new Panel(new GridLayout(1));
 			
-			Label kullaniciAdi = new Label("Kitap Adı: " + SamdanMechanic.getBookName()).addTo(mainPanel);
+			Label kullaniciAdi = new Label("Kitap Adı: " + SamdanMechanic.getBookName(selectedIsbn)).addTo(mainPanel);
 			
 			mainPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(2)));
 			
 			Table<String> ratingsTable = new Table<>("[ ]", "Kullanıcı Adı", "Puan", "Değerlendirme");
-			ratingsTable.setSelectAction( ()-> SamdanDashboard.showDashboard());
 			TableModel<String> tableModel = ratingsTable.getTableModel();
 
             // Track the explicitly selected row index (-1 means none selected yet)
@@ -63,7 +62,7 @@ public class SamdanDegerlendirmeler {
             Runnable loadAndFormatArchive = () -> {
                 tableModel.clear();
                 Table<String> tempTable = new Table<>("Kullanıcı Adı", "Puan", "Değerlendirme");
-                SamdanMechanic.loadRatingsTableForABook(tempTable.getTableModel());
+                SamdanMechanic.loadRatingsTableForABook(tempTable.getTableModel(), selectedIsbn);
                 
                 for (int i = 0; i < tempTable.getTableModel().getRowCount(); i++) {
                     List<String> srcRow = tempTable.getTableModel().getRow(i);
@@ -131,7 +130,7 @@ public class SamdanDegerlendirmeler {
 			mainPanel.addComponent(degerlendirmeTextBox.withBorder(Borders.singleLine("Değerlendirme")));
 			
 			//Değerlendirme Gönder Butonu
-			mainPanel.addComponent(new Button("Gönder", () -> SamdanMechanic.saveRatings(puan, degerlendirmeTextBox.getText())));
+			mainPanel.addComponent(new Button("Gönder", () -> SamdanMechanic.saveRatings(selectedIsbn, puan, degerlendirmeTextBox.getText())));
             
             //Zemin Panel
             Panel zeminPanel = new Panel(new GridLayout(2));

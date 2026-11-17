@@ -45,7 +45,7 @@ public class SamdanDashboard {
             Panel headerPanel = new Panel(new GridLayout(3));
             headerPanel.addComponent(new Label("ŞAMDAN KÜTÜPHANE"));
             headerPanel.addComponent(new Label(" | Kullanıcı: Emre Karaduman"));
-            headerPanel.addComponent(new Button("Çıkış", window::close));
+            headerPanel.addComponent(new Button("Profil", () -> SamdanKullanici.showKullanici()));
             mainPanel.addComponent(headerPanel);
 
             mainPanel.addComponent(new Separator(Direction.HORIZONTAL));
@@ -103,7 +103,7 @@ public class SamdanDashboard {
             
             updateSelectionIndicators.run();
 
-            mainPanel.addComponent(bookTable.withBorder(Borders.singleLine("Kitap Arşivi")));
+            mainPanel.addComponent(bookTable.withBorder(Borders.singleLine("Kitap Listesi")));
 
             //Search and Filter Panel
             Panel searchPanel = new Panel(new GridLayout(4));
@@ -111,11 +111,31 @@ public class SamdanDashboard {
             TextBox searchBox = new TextBox(new TerminalSize(30, 1));
             searchPanel.addComponent(searchBox);
             
+            //Filtreler Combo Box
+            new Label("Filtreler: ").addTo(searchPanel);
+          	ComboBox<String> filtreComboBox = new ComboBox<String>();
+          	filtreComboBox.addItem("Kitap Adı");
+          	filtreComboBox.addItem("Yazar");
+          	filtreComboBox.addItem("Yayınevi");
+          	filtreComboBox.addItem("Kütüphane");
+          	int seciliFiltre = filtreComboBox.getSelectedIndex();
+          	
+          	//Kitap Türü Combo Box
+            new Label("Kitap Türü: ").addTo(searchPanel);
+          	ComboBox<String> kitapTuruComboBox = new ComboBox<String>();
+          	kitapTuruComboBox.addItem("Hepsi");
+          	kitapTuruComboBox.addItem("Roman");
+          	kitapTuruComboBox.addItem("Hikaye");
+          	kitapTuruComboBox.addItem("Şiir");
+          	kitapTuruComboBox.addItem("Destan");
+          	int seciliKitapTuru = kitapTuruComboBox.getSelectedIndex();
+          	
+            
             //Call SamdanMechanic for searching
             searchPanel.addComponent(new Button("Ara", () -> {
                 tableModel.clear();
                 Table<String> tempTable = new Table<>("ISBN", "Kitap Adı", "Yazar", "Yayınevi", "Tür", "Sayfa Sayısı");
-                SamdanMechanic.searchBooks(gui, searchBox.getText(), tempTable.getTableModel());
+                SamdanMechanic.searchBooks(gui, tempTable.getTableModel(), searchBox.getText(), seciliFiltre, seciliKitapTuru);
                 
                 for (int i = 0; i < tempTable.getTableModel().getRowCount(); i++) {
                     List<String> srcRow = tempTable.getTableModel().getRow(i);
@@ -133,10 +153,13 @@ public class SamdanDashboard {
                 loadAndFormatArchive.run();
                 updateSelectionIndicators.run();
             }));
-            mainPanel.addComponent(searchPanel);
-
+          	
+          	searchPanel.addComponent(filtreComboBox);
+          	searchPanel.addComponent(kitapTuruComboBox);
+          	mainPanel.addComponent(searchPanel);
+          	
             //Action Buttons Panel
-            Panel actionPanel = new Panel(new GridLayout(3));
+            Panel actionPanel = new Panel(new GridLayout(4));
             
             // Helper lambda to fetch the currently confirmed selected book's ISBN
             java.util.function.Supplier<String> getSelectedIsbn = () -> {
@@ -152,16 +175,20 @@ public class SamdanDashboard {
                 return null;
             };
 
-            actionPanel.addComponent(new Button("Kitabı Edindim İşaretle", () -> {
+            actionPanel.addComponent(new Button("Kitabı Edin", () -> {
                 SamdanMechanic.markBookAsOwned(gui, getSelectedIsbn.get());
             }));
 
-            actionPanel.addComponent(new Button("Ariyet (Hangi Kütüphanede?)", () -> {
-                SamdanMechanic.checkLibraryLocation(gui, getSelectedIsbn.get());
+            actionPanel.addComponent(new Button("Ariyet (Kitap Kimde?)", () -> {
+                SamdanMechanic.checkWhoOwns(gui, getSelectedIsbn.get());
             }));
 
             actionPanel.addComponent(new Button("Değerlendirmeler", () -> {
                 SamdanMechanic.openReviews(gui, getSelectedIsbn.get());
+            }));
+            
+            actionPanel.addComponent(new Button("Kitap Hakkında", () -> {
+                SamdanMechanic.openBookInformation(gui, getSelectedIsbn.get());
             }));
 
             mainPanel.addComponent(actionPanel);
