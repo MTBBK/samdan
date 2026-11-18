@@ -100,7 +100,34 @@ public class SamdanMechanic {
 
     // Publisher Name
     public static String getPublisherName(String selectedIsbn) {
-        return "Osman Kuru Yayınları";
+        // return "Osman Kuru Yayınları";
+        ResultSet rs = null;
+
+        try {
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT yayıneviAdı
+                    FROM YAYINEVİ_OLMA K, YAYINEVİ Y
+                    WHERE kitapISBN=""" + selectedIsbn + " AND K.yayıneviNumarası=Y.yayıneviNumarası;";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("yayıneviAdı");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+
+        }
+
+        return null;
     }
 
     // Library Name
