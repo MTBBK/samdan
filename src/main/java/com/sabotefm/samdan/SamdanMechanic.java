@@ -303,24 +303,8 @@ public class SamdanMechanic {
         Connection connection = null;
 
         try {
-            // 2. Establish Connection
+            // Establish Connection
             connection = DriverManager.getConnection(url, userName, password);
-
-            // 3. Create Statement
-            Statement stmt = con.createStatement();
-
-            // 4. Execute Query
-            ResultSet rs = stmt.executeQuery("SELECT * FROM students");
-
-            // 5. Process Results
-            while (rs.next()) {
-                System.out.println(rs.getInt("id") + " " + rs.getString("name") + " " + rs.getInt("age"));
-            }
-
-            // 6. Close resources
-            rs.close();
-            stmt.close();
-            con.close();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             System.out.println("SQL State: " + e.getSQLState());
