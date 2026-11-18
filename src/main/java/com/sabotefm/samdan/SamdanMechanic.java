@@ -132,17 +132,99 @@ public class SamdanMechanic {
 
     // Library Name
     public static String getLibraryName(String selectedIsbn) {
-        return "İskenderiye Kütüphanesi";
+        // return "İskenderiye Kütüphanesi";
+        ResultSet rs = null;
+
+        try {
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kütüphaneAdı
+                    FROM KÜTÜPHANEDE_BULUNMA K, KÜTÜPHANE Y
+                    WHERE kitapISBN=""" + selectedIsbn + " AND K.yayıneviNumarası=Y.yayıneviNumarası;";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kütüphaneAdı");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+
+        }
+
+        return null;
     }
 
     // Book Type
     public static String getTypeName(String selectedIsbn) {
-        return "Roman";
+        // return "Roman";
+        ResultSet rs = null;
+
+        try {
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapTürü
+                    FROM KİTAP K
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kitapTürü");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+
+        }
+
+        return null;
+
     }
 
     // Page Count
     public static String getPageCount(String selectedIsbn) {
-        return "18";
+        // return "18";
+        ResultSet rs = null;
+
+        try {
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapSayfaSayısı
+                    FROM KİTAP K
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kitapSayfaSayısı");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+
+        }
+
+        return null;
     }
 
     // Login
