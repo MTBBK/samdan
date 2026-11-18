@@ -27,12 +27,14 @@ public class SamdanMechanic {
 
     // Book Informations
     // Book Name
-    public static String getBookName(String selectedIsbn) {
+    public static String getBookName(WindowBasedTextGUI gui, String selectedIsbn) {
         // return "Osman Kuru'nun Hayatı";
 
         ResultSet rs = null;
 
         try {
+
+            establishConnection();
 
             Statement stmt = con.createStatement();
 
@@ -53,23 +55,222 @@ public class SamdanMechanic {
             }
 
         } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
 
+        return null;
+    }
+
+    public static String getWriterNumber(WindowBasedTextGUI gui, String selectedIsbn) {
+        // TODO
+        ResultSet rs = null;
+
+        try {
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT yazarNumarası
+                    FROM YAZARI_OLMA
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("yazarNumarası");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static String getPublisherNumber(WindowBasedTextGUI gui, String selectedIsbn) {
+        // TODO
+        ResultSet rs = null;
+
+        try {
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT yayıneviNumarası
+                    FROM YAYINEVİ_OLMA
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("yayıneviNumarası");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static String getLibraryNumber(WindowBasedTextGUI gui, String selectedIsbn) {
+        // TODO
+        ResultSet rs = null;
+
+        try {
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kütüphaneNumarası
+                    FROM KÜTÜPHANEDE_BULUNMA
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kütüphaneNumarası");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static String getLibraryLocation(WindowBasedTextGUI gui, String selectedIsbn) {
+        // TODO
+        ResultSet rs = null;
+
+        try {
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kütüphaneKonumu
+                    FROM KÜTÜPHANEDE_BULUNMA
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kütüphaneKonumu");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static String getNumberOfPrint(WindowBasedTextGUI gui, String selectedIsbn) {
+        // return "Osman Kuru'nun Hayatı";
+
+        ResultSet rs = null;
+
+        try {
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapBaskıSayısı
+                    FROM KİTAP
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kitapBaskıSayısı");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static String getReleaseDate(WindowBasedTextGUI gui, String selectedIsbn) {
+        ResultSet rs = null;
+
+        try {
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapÇıkışYılı
+                    FROM KİTAP
+                    WHERE kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            if (null == rs) {
+                return null;
+            } else {
+                String answer = rs.getString("kitapÇıkışYılı");
+                rs.close();
+                return answer;
+            }
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
 
         return null;
     }
 
     // Writer Name
-    public static String getWriterName(String selectedIsbn) {
+    public static String getWriterName(WindowBasedTextGUI gui, String selectedIsbn) {
         // return "Melih Efe Tursun";
 
         ResultSet rs = null;
 
-        while (null == con) {
-            establishConnection();
-        }
-
         try {
+
+            establishConnection();
 
             Statement stmt = con.createStatement();
 
@@ -90,20 +291,20 @@ public class SamdanMechanic {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-            System.out.println("SQL State: " + e.getSQLState());
-            System.out.println("Error Code: " + e.getErrorCode());
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
 
         return null;
     }
 
     // Publisher Name
-    public static String getPublisherName(String selectedIsbn) {
+    public static String getPublisherName(WindowBasedTextGUI gui, String selectedIsbn) {
         // return "Osman Kuru Yayınları";
         ResultSet rs = null;
 
         try {
+            establishConnection();
 
             Statement stmt = con.createStatement();
 
@@ -124,18 +325,20 @@ public class SamdanMechanic {
             }
 
         } catch (SQLException e) {
-
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
 
         return null;
     }
 
     // Library Name
-    public static String getLibraryName(String selectedIsbn) {
+    public static String getLibraryName(WindowBasedTextGUI gui, String selectedIsbn) {
         // return "İskenderiye Kütüphanesi";
         ResultSet rs = null;
 
         try {
+            establishConnection();
 
             Statement stmt = con.createStatement();
 
@@ -156,18 +359,20 @@ public class SamdanMechanic {
             }
 
         } catch (SQLException e) {
-
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
 
         return null;
     }
 
     // Book Type
-    public static String getTypeName(String selectedIsbn) {
+    public static String getTypeName(WindowBasedTextGUI gui, String selectedIsbn) {
         // return "Roman";
         ResultSet rs = null;
 
         try {
+            establishConnection();
 
             Statement stmt = con.createStatement();
 
@@ -188,7 +393,8 @@ public class SamdanMechanic {
             }
 
         } catch (SQLException e) {
-
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
 
         return null;
@@ -196,11 +402,12 @@ public class SamdanMechanic {
     }
 
     // Page Count
-    public static String getPageCount(String selectedIsbn) {
+    public static String getPageCount(WindowBasedTextGUI gui, String selectedIsbn) {
         // return "18";
         ResultSet rs = null;
 
         try {
+            establishConnection();
 
             Statement stmt = con.createStatement();
 
@@ -221,24 +428,25 @@ public class SamdanMechanic {
             }
 
         } catch (SQLException e) {
-
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
 
         return null;
     }
 
     // Login
-    public static void loginToSamdan(String userName, String passWord) {
+    public static void loginToSamdan(WindowBasedTextGUI gui, String userName, String passWord) {
         SamdanDashboard.showDashboard();
     }
 
     // Send Ratings
-    public static void saveRatings(String selectedIsbn, int points, String evalution) {
+    public static void saveRatings(WindowBasedTextGUI gui, String selectedIsbn, int points, String evalution) {
         // Save ratings
     }
 
     // Load book table data
-    public static void loadBookArchive(TableModel<String> tableModel) {
+    public static void loadBookArchive(WindowBasedTextGUI gui, TableModel<String> tableModel) {
         tableModel.clear();
         // TODO: Replace with MySQL database queries for KİTAP TABLOSU, YAZAR TABLOSU,
         // etc.
@@ -249,7 +457,7 @@ public class SamdanMechanic {
     }
 
     // Load ratings table data for users
-    public static void loadRatingsTableForUsers(TableModel<String> tableModel) {
+    public static void loadRatingsTableForUsers(WindowBasedTextGUI gui, TableModel<String> tableModel) {
         tableModel.clear();
         // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR
         // TABLOSU,
@@ -260,7 +468,8 @@ public class SamdanMechanic {
     }
 
     // Load ratings table data for a single book
-    public static void loadRatingsTableForABook(TableModel<String> tableModel, String selectedIsbn) {
+    public static void loadRatingsTableForABook(WindowBasedTextGUI gui, TableModel<String> tableModel,
+            String selectedIsbn) {
         tableModel.clear();
         // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR
         // TABLOSU,
@@ -304,7 +513,7 @@ public class SamdanMechanic {
     }
 
     // Handle marking a book as acquired by the user (Kitap Edinme)
-    public static void markBookAsOwned(WindowBasedTextGUI gui, String selectedIsbn) {
+    public static void markBookAsBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
             String title = "Seçim Hatası";
             String message = "Lütfen tablodan işlem yapmak için bir kitap seçin.";
@@ -320,7 +529,7 @@ public class SamdanMechanic {
     }
 
     // Check who owns the book right now (Ariyet)
-    public static void checkWhoOwns(WindowBasedTextGUI gui, String selectedIsbn) {
+    public static void checkWhoBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
             String title = "Seçim Hatası";
             String message = "Lütfen tablodan bir kitap seçin.";
@@ -333,17 +542,19 @@ public class SamdanMechanic {
         String ownerOfTheBook = "Ahmet";
 
         // Eğer Sahibi Varsa
-        String messageToShow = "Seçilen " + selectedIsbn + " ISBN numaralı kitap, " + ownerOfTheBook
-                + " adlı şahsın elinde (Onu Kurtar)";
+        SamdanKullanici.showKullanici();
 
         // Eğer Sahibi Yoksa
-        messageToShow = "Seçilen " + selectedIsbn
+        String messageToShow = "Seçilen " + selectedIsbn
                 + " ISBN numaralı kitap, kimsede değil merak etme git ve kütüphaneden al";
-
         // Mesaj Göster
         String title = "Ariyet Durumu";
         String message = messageToShow;
         popUpMakerOK(gui, title, message);
+    }
+
+    public static String getWhoBorrowed() {
+        return null;
     }
 
     // View or write reviews/comments (Değerlendirmeler)
