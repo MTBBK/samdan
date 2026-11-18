@@ -176,11 +176,11 @@ public class SamdanDashboard {
             };
 
             actionPanel.addComponent(new Button("Kitabı Edin", () -> {
-                SamdanMechanic.markBookAsOwned(gui, getSelectedIsbn.get());
+                SamdanMechanic.markBookAsBorrowed(gui, getSelectedIsbn.get());
             }));
 
             actionPanel.addComponent(new Button("Ariyet (Kitap Kimde?)", () -> {
-                SamdanMechanic.checkWhoOwns(gui, getSelectedIsbn.get());
+                SamdanMechanic.checkWhoBorrowed(gui, getSelectedIsbn.get());
             }));
 
             actionPanel.addComponent(new Button("Değerlendirmeler", () -> {

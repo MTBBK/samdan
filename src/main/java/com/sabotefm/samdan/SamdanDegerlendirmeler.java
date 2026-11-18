@@ -48,7 +48,7 @@ public class SamdanDegerlendirmeler {
 
             Panel mainPanel = new Panel(new GridLayout(1));
 			
-			Label kullaniciAdi = new Label("Kitap Adı: " + SamdanMechanic.getBookName(selectedIsbn)).addTo(mainPanel);
+			Label kullaniciAdi = new Label("Kitap Adı: " + SamdanMechanic.getBookName(gui, selectedIsbn)).addTo(mainPanel);
 			
 			mainPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(2)));
 			
