@@ -553,7 +553,7 @@ public class SamdanMechanic {
         popUpMakerOK(gui, title, message);
     }
 
-    public static String getWhoBorrowed() {
+    public static String getWhoBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         return null;
     }
 
