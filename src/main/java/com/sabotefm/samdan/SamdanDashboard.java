@@ -62,7 +62,7 @@ public class SamdanDashboard {
             Runnable loadAndFormatArchive = () -> {
                 tableModel.clear();
                 Table<String> tempTable = new Table<>("ISBN", "Kitap Adı", "Yazar", "Yayınevi", "Tür", "Sayfa Sayısı");
-                SamdanMechanic.loadBookArchive(tempTable.getTableModel());
+                SamdanMechanic.loadBookArchive(gui, tempTable.getTableModel());
                 
                 for (int i = 0; i < tempTable.getTableModel().getRowCount(); i++) {
                     List<String> srcRow = tempTable.getTableModel().getRow(i);

@@ -57,7 +57,7 @@ public class SamdanGiris {
 			
 			mainPanel.addComponent(kullaniciAdiTextBox.withBorder(Borders.singleLine("Kullanıcı Adı")));
 			mainPanel.addComponent(sifreTextBox.withBorder(Borders.singleLine("Şifre")));
-            mainPanel.addComponent(new Button("Giriş", () -> SamdanMechanic.loginToSamdan(kullaniciAdiTextBox.getText(), sifreTextBox.getText())));
+            mainPanel.addComponent(new Button("Giriş", () -> SamdanMechanic.loginToSamdan(gui, kullaniciAdiTextBox.getText(), sifreTextBox.getText())));
 			
             
             //Zemin Panel

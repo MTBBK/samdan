@@ -95,7 +95,7 @@ public class SamdanKitap {
 			Panel thirdPanel = new Panel();
 			thirdPanel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
 			new Label("Baskı Sayısı").addTo(thirdPanel);
-			new Label(SamdanMechanic.getNumberOfPrints(gui, selectedIsbn)).addTo(thirdPanel);
+			new Label(SamdanMechanic.getNumberOfPrint(gui, selectedIsbn)).addTo(thirdPanel);
 			thirdPanel.addComponent(new Separator(Direction.HORIZONTAL));
 			
 			Panel eighthPanel = new Panel();

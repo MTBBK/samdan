@@ -63,7 +63,7 @@ public class SamdanKullanici {
             Runnable loadAndFormatArchive = () -> {
                 tableModel.clear();
                 Table<String> tempTable = new Table<>("Kitap Adı", "Puan", "Değerlendirme");
-                SamdanMechanic.loadRatingsTableForUsers(tempTable.getTableModel());
+                SamdanMechanic.loadRatingsTableForUsers(gui, tempTable.getTableModel());
                 
                 for (int i = 0; i < tempTable.getTableModel().getRowCount(); i++) {
                     List<String> srcRow = tempTable.getTableModel().getRow(i);
