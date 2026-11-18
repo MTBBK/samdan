@@ -244,7 +244,8 @@ public class SamdanMechanic {
         // etc.
         tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
         tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali", "Yapı Kredi", "Roman", "160");
-        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman","396");
+        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman",
+                "396");
     }
 
     // Load ratings table data for users
@@ -273,9 +274,9 @@ public class SamdanMechanic {
     public static void searchBooks(WindowBasedTextGUI gui, TableModel<String> tableModel, String arananKelime,
             int seciliFiltre, int seciliKitapTuru) {
         if (arananKelime == null || arananKelime.trim().isEmpty()) {
-			String title="Uyarı";
-			String message="Lütfen aranacak bir kelime veya ISBN girin.";
-			popUpMakerOK(gui,title,message);
+            String title = "Uyarı";
+            String message = "Lütfen aranacak bir kelime veya ISBN girin.";
+            popUpMakerOK(gui, title, message);
             return;
         } else {
             tableModel.clear();
@@ -305,25 +306,25 @@ public class SamdanMechanic {
     // Handle marking a book as acquired by the user (Kitap Edinme)
     public static void markBookAsOwned(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
-			String title="Seçim Hatası";
-			String message="Lütfen tablodan işlem yapmak için bir kitap seçin.";
-			popUpMakerOK(gui,title,message);
+            String title = "Seçim Hatası";
+            String message = "Lütfen tablodan işlem yapmak için bir kitap seçin.";
+            popUpMakerOK(gui, title, message);
             return;
         }
         // TODO: Insert/Update record in user ownership database relation
 
         // Kitabı kişiye ekle
-        String title="Başarılı";
-		String message="Seçilen kitap (ISBN: " + selectedIsbn + ") edindiğiniz olarak işaretlendi.";
-		popUpMakerOK(gui,title,message);
+        String title = "Başarılı";
+        String message = "Seçilen kitap (ISBN: " + selectedIsbn + ") edindiğiniz olarak işaretlendi.";
+        popUpMakerOK(gui, title, message);
     }
 
     // Check who owns the book right now (Ariyet)
     public static void checkWhoOwns(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
-			String title="Seçim Hatası";
-			String message="Lütfen tablodan bir kitap seçin.";
-			popUpMakerOK(gui,title,message);
+            String title = "Seçim Hatası";
+            String message = "Lütfen tablodan bir kitap seçin.";
+            popUpMakerOK(gui, title, message);
             return;
         }
         // TODO: Query ARİYET TABLOSU from MySQL
@@ -340,25 +341,25 @@ public class SamdanMechanic {
                 + " ISBN numaralı kitap, kimsede değil merak etme git ve kütüphaneden al";
 
         // Mesaj Göster
-        String title="Ariyet Durumu";
-		String message=messageToShow;
-		popUpMakerOK(gui,title,message);
+        String title = "Ariyet Durumu";
+        String message = messageToShow;
+        popUpMakerOK(gui, title, message);
     }
 
     // View or write reviews/comments (Değerlendirmeler)
     public static void openReviews(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
-			String title="Seçim Hatası";
-			String message="Lütfen tablodan bir kitap seçin.";
-			popUpMakerOK(gui,title,message);
+            String title = "Seçim Hatası";
+            String message = "Lütfen tablodan bir kitap seçin.";
+            popUpMakerOK(gui, title, message);
             return;
         }
         // TODO: Query reviews/comments table for this book
 
         // Değerlendirme Yoksa Bu Koşul
-        String title="Değerlendirmeler";
-		String message="Bu kitap için henüz yorum girilmemiş.\n(ISBN: " + selectedIsbn + ")";
-		popUpMakerOK(gui,title,message);
+        String title = "Değerlendirmeler";
+        String message = "Bu kitap için henüz yorum girilmemiş.\n(ISBN: " + selectedIsbn + ")";
+        popUpMakerOK(gui, title, message);
 
         // Değerlendirme varsa bu koşul
         SamdanDegerlendirmeler.showDegerlendirmeler(selectedIsbn);
@@ -367,37 +368,38 @@ public class SamdanMechanic {
     // Go to Book Information Page
     public static void openBookInformation(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
-			String title="Seçim Hatası";
-			String message="Lütfen tablodan bir kitap seçin.";
-			popUpMakerOK(gui,title,message);
+            String title = "Seçim Hatası";
+            String message = "Lütfen tablodan bir kitap seçin.";
+            popUpMakerOK(gui, title, message);
             return;
         }
         SamdanKitap.showKitap(selectedIsbn);
     }
-    
-    public static void popUpMakerOK(WindowBasedTextGUI gui, String title, String message){
-		new MessageDialogBuilder()
+
+    public static void popUpMakerOK(WindowBasedTextGUI gui, String title, String message) {
+        new MessageDialogBuilder()
                 .setTitle(title)
                 .setText(message)
                 .addButton(MessageDialogButton.OK)
                 .build()
                 .showDialog(gui);
-	}
-    public static void popUpMakerRetry(WindowBasedTextGUI gui, String title, String message){
-		new MessageDialogBuilder()
+    }
+
+    public static void popUpMakerRetry(WindowBasedTextGUI gui, String title, String message) {
+        new MessageDialogBuilder()
                 .setTitle(title)
                 .setText(message)
                 .addButton(MessageDialogButton.Retry)
                 .build()
                 .showDialog(gui);
-	}
+    }
 
     // TODO: Establish connection to the database
 
     // https://www.geeksforgeeks.org/java/jdbc-tutorial/
     private static void establishConnection() {
 
-        if (null == con) {
+        if (null != con) {
             return;
         }
 
