@@ -490,12 +490,46 @@ public class SamdanMechanic {
     // Load book table data
     public static void loadBookArchive(WindowBasedTextGUI gui, TableModel<String> tableModel) {
         tableModel.clear();
-        // TODO: Replace with MySQL database queries for KİTAP TABLOSU, YAZAR TABLOSU,
-        // etc.
-        tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
-        tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali", "Yapı Kredi", "Roman", "160");
-        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman",
-                "396");
+
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapISBN, kitapAdi, yazarAdi, yayineviAdi, kitapTuru, kitapSayfaSayisi
+                    FROM KITAP K
+                    INNER JOIN "YAZARI OLMA" Y ON K.kitapISBN=Y.kitapISBN
+                    INNER JOIN YAZAR B ON B.yazarNumarasi=Y.yazarNumarasi;""";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[6];
+                for (int i = 0; i < 6; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        /*
+         * tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk",
+         * "Millî Eğitim", "Tarih", "550");
+         * tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali",
+         * "Yapı Kredi", "Roman", "160");
+         * tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü",
+         * "Ahmet HamdiTanpınar", "Dergah", "Roman", "396");
+         */
     }
 
     // Load ratings table data for users
