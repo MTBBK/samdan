@@ -6,7 +6,7 @@ YAYINEVI (yayineviNumarasi (Key), yayineviAdi)
 
 KUTUPHANE (kutuphaneNumarasi (Key), kutuphaneAdi, kutuphaneKonumu)
 
-KULLANICI (kullaniciNumarasi (Key), kullaniciAdi, sifre, yetkiSeviyesi, okurYasi)
+KULLANICI (kullaniciAdi (Key), gercekAdi, sifre, yetkiSeviyesi, okurYasi)
 
 ARIYET (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI))
 
