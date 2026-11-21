@@ -8,10 +8,15 @@ import java.sql.*;
 
 public class SamdanMechanic {
 
+    // for database connection
     private static String url;
-    private static String userName;
-    private static String password;
+    private static String databaseUser;
+    private static String databasePassword;
     private static Connection con;
+
+    // for user information
+    private static String userName;
+    private static String authorisation;
 
     // Getters
 
@@ -22,7 +27,7 @@ public class SamdanMechanic {
 
     // Authorization
     public static String getAuthorization() {
-        return "Admin";
+        return authorisation;
     }
 
     // Book Informations
@@ -388,13 +393,98 @@ public class SamdanMechanic {
     }
 
     // Login
-    public static void loginToSamdan(WindowBasedTextGUI gui, String userName, String passWord) {
-        SamdanDashboard.showDashboard();
+    public static void loginToSamdan(WindowBasedTextGUI gui, String username, String passWord) {
+
+        userName = null;
+        authorisation = null;
+
+        String passAnswer = null;
+        String authAnswer = null;
+
+        try {
+            ResultSet rs = null;
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT sifre, yetkiSeviyesi
+                    FROM KULLANICI K
+                    WHERE kullaniciAdi=""" + username + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            passAnswer = rs.getString("sifre");
+            authAnswer = rs.getString("yetkiSeviyesi");
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        if (null == passAnswer) {
+            // throw error "wrong password or username"
+            popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
+        } else if (!passWord.equals(passAnswer)) {
+            // throw error "wrong password or username"
+            popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
+        } else if (null == authAnswer) {
+            // throw error "user's auth level couldn't be found"
+            popUpMakerOK(gui, "Error: Yetki seviyesi bulunamadi", "Yetki seviyesi bulunamadi");
+        } else {
+            username = userName;
+            authorisation = authAnswer;
+            SamdanDashboard.showDashboard();
+        }
+
     }
 
     // Send Ratings
     public static void saveRatings(WindowBasedTextGUI gui, String selectedIsbn, int points, String evalution) {
-        // Save ratings
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String searchQuery = """
+                    SELECT kitapSayfaSayisi
+                    FROM DEGERLENDIRME K
+                    WHERE kitapISBN=""" + selectedIsbn + "AND kullaniciAdi= " + userName + ";";
+            ;
+            rs = stmt.executeQuery(searchQuery);
+
+            String userAnswer = rs.getString("kullaniciAdi");
+            rs.close();
+
+            if (null == userAnswer) {
+                String insertQuery = """
+                        INSERT INTO DEGERLENDIRME
+                        VALUES (""" + selectedIsbn + ", " + userName + ", " + evalution + ", " + points + ");";
+                stmt.executeQuery(insertQuery);
+            } else {
+                String updateQuery = null;
+                if (null == evalution) {
+                    updateQuery = """
+                            UPDATE DEGERLENDIRME
+                            SET puan = """ + points + """
+                            WHERE kitapISBN=""" + selectedIsbn + "AND kullaniciAdi= " + userName + ";";
+                } else {
+                    updateQuery = """
+                            UPDATE DEGERLENDIRME
+                            SET puan = """ + points + ", degerlendirme = " + evalution + """
+                            WHERE kitapISBN=""" + selectedIsbn + "AND kullaniciAdi= " + userName + ";";
+                }
+                stmt.executeQuery(updateQuery);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
     }
 
     // Load book table data
@@ -570,7 +660,7 @@ public class SamdanMechanic {
 
         try {
             // Establish Connection
-            connection = DriverManager.getConnection(url, userName, password);
+            connection = DriverManager.getConnection(url, databaseUser, databasePassword);
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             System.out.println("SQL State: " + e.getSQLState());
@@ -579,5 +669,9 @@ public class SamdanMechanic {
 
         con = connection;
         return;
+    }
+
+    private static void getDatabaseUser() {
+        // TODO: gets database user's username and password with some dark magic
     }
 }
