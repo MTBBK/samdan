@@ -535,24 +535,83 @@ public class SamdanMechanic {
     // Load ratings table data for users
     public static void loadRatingsTableForUsers(WindowBasedTextGUI gui, TableModel<String> tableModel) {
         tableModel.clear();
-        // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR
-        // TABLOSU,
-        // etc.
-        tableModel.addRow("Nutuk", "8/10", "Tarihiydi");
-        tableModel.addRow("Kestane Gürgen Palamut", "7/10", "Altı Yaprak Üstü Bulut");
-        tableModel.addRow("Kürk Mantadolu Madonna", "6/10", "Sabahattin Aliliydi");
+
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapAdi, puan, degerlendirme
+                    FROM KITAP K
+                    INNER JOIN DEGERLENDIRME Y ON K.kitapISBN=Y.kitapISBN;""";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[3];
+                for (int i = 0; i < 3; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1] + "/10", entry[2]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        // tableModel.addRow("Nutuk", "8/10", "Tarihiydi");
+        // tableModel.addRow("Kestane Gürgen Palamut", "7/10", "Altı Yaprak Üstü
+        // Bulut");
+        // tableModel.addRow("Kürk Mantadolu Madonna", "6/10", "Sabahattin Aliliydi");
     }
 
     // Load ratings table data for a single book
     public static void loadRatingsTableForABook(WindowBasedTextGUI gui, TableModel<String> tableModel,
             String selectedIsbn) {
         tableModel.clear();
-        // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR
-        // TABLOSU,
-        // etc.
-        tableModel.addRow("Emre Karaduman", "8/10", "no way");
-        tableModel.addRow("Melih Efe Tursun", "7/10", "Çok iyi");
-        tableModel.addRow("Osman Kuru", "6/10", "Osman");
+
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT gercekAdi, puan, degerlendirme
+                    FROM KITAP K
+                    INNER JOIN DEGERLENDIRME Y ON K.kitapISBN=Y.kitapISBN
+                    INNER JOIN KULLANICI A ON Y.kullaniciAdi=A.kullaniciAdi
+                    WHERE K.kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[3];
+                for (int i = 0; i < 3; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1] + "/10", entry[2]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        // tableModel.addRow("Emre Karaduman", "8/10", "no way");
+        // tableModel.addRow("Melih Efe Tursun", "7/10", "Çok iyi");
+        // tableModel.addRow("Osman Kuru", "6/10", "Osman");
     }
 
     // Handle book search functionality
