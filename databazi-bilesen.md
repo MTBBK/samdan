@@ -8,7 +8,7 @@ KUTUPHANE (kutuphaneNumarasi (Key), kutuphaneAdi, kutuphaneKonumu)
 
 KULLANICI (kullaniciAdi (Key), gercekAdi, sifre, yetkiSeviyesi, okurYasi)
 
-DEGERLENDIRME (kitapISBN(FK: KITAP), kullaniciAdi(FK: KULLANICI), degerlendirme, puan)
+DEGERLENDIRME (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI), degerlendirme, puan)
 
 ARIYET (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI))
 
