@@ -16,4 +16,4 @@ YAZARI OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
 
 YAYINEVI OLMA (kitapISBN (FK: KITAP), yayineviNumarasi (FK: YAYINEVI))
 
-KUTUPHANE BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi (FK: KITAP), kutuphaneNumarasi (FK: KUTUPHANE))
+KUTUPHANE BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi, kutuphaneNumarasi (FK: KUTUPHANE))
