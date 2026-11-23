@@ -10,7 +10,7 @@ KULLANICI (kullaniciAdi (Key), gercekAdi, sifre, yetkiSeviyesi, okurYasi)
 
 DEGERLENDIRME (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI), degerlendirme, puan)
 
-ARIYET (kitapISBN (FK: KITAP), kopyaNumarasi (FK: KOPYA), kullaniciAdi (FK: KULLANICI))
+ARIYET (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI))
 
 YAZARI OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
 
