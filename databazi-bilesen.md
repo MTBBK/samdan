@@ -10,8 +10,9 @@ YAYINEVI (yayineviNumarasi, yayineviAdi)
 KUTUPHANE (kutuphaneNumarasi, kutuphaneAdi, kutuphaneKonumu)
 - Primary Key: (kutuphaneNumarasi)
 
-KULLANICI (kullaniciAdi, gercekAdi, sifre, yetkiSeviyesi, okurYasi, tcno)
+KULLANICI (kullaniciAdi, gercekAdi, sifre, yetkiSeviyesi, okurYasi, TCNO)
 - Primary Key: (kullaniciAdi)
+- UNIQUE: (TCNO)
 
 DEGERLENDIRME (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI), degerlendirme, puan)
 - Primary Key: (kitapISBN, kullaniciAdi)
