@@ -52,6 +52,7 @@ public class SamdanDashboard {
 
             //Books Table View Setup with selection column at the start
             Table<String> bookTable = new Table<>("[ ]", "ISBN", "Kitap Adı", "Yazar", "Yayınevi", "Tür", "Sayfa Sayısı");
+            bookTable.setVisibleRows(15);
             
             TableModel<String> tableModel = bookTable.getTableModel();
 
@@ -106,36 +107,56 @@ public class SamdanDashboard {
             mainPanel.addComponent(bookTable.withBorder(Borders.singleLine("Kitap Listesi")));
 
             //Search and Filter Panel
-            Panel searchPanel = new Panel(new GridLayout(4));
-            searchPanel.addComponent(new Label("Kitap Ara:"));
-            TextBox searchBox = new TextBox(new TerminalSize(30, 1));
-            searchPanel.addComponent(searchBox);
+            Panel searchPanel = new Panel(new GridLayout(2));            
             
-            //Filtreler Combo Box
-            new Label("Filtreler: ").addTo(searchPanel);
-          	ComboBox<String> filtreComboBox = new ComboBox<String>();
-          	filtreComboBox.addItem("Kitap Adı");
-          	filtreComboBox.addItem("Yazar");
-          	filtreComboBox.addItem("Yayınevi");
-          	filtreComboBox.addItem("Kütüphane");
-          	int seciliFiltre = filtreComboBox.getSelectedIndex();
-          	
           	//Kitap Türü Combo Box
             new Label("Kitap Türü: ").addTo(searchPanel);
           	ComboBox<String> kitapTuruComboBox = new ComboBox<String>();
           	kitapTuruComboBox.addItem("Hepsi");
-          	kitapTuruComboBox.addItem("Roman");
-          	kitapTuruComboBox.addItem("Hikaye");
+          	kitapTuruComboBox.addItem("Tarih");
+          	kitapTuruComboBox.addItem("Bilimkurgu");
+          	kitapTuruComboBox.addItem("İş Kitapları");
+          	kitapTuruComboBox.addItem("Dil Öğrenimi");
+          	kitapTuruComboBox.addItem("Çocuk");
+          	kitapTuruComboBox.addItem("Macera");
+          	kitapTuruComboBox.addItem("Gizem");
+          	kitapTuruComboBox.addItem("Korku");
+          	kitapTuruComboBox.addItem("Romantizm");
+          	kitapTuruComboBox.addItem("Grafik Roman");
+          	kitapTuruComboBox.addItem("Biyografi");
+          	kitapTuruComboBox.addItem("Otobiyografi");
+          	kitapTuruComboBox.addItem("Yemek");
           	kitapTuruComboBox.addItem("Şiir");
-          	kitapTuruComboBox.addItem("Destan");
+          	kitapTuruComboBox.addItem("Kılavuz");
+          	kitapTuruComboBox.addItem("Seyahat");
+          	kitapTuruComboBox.addItem("Albüm");
+          	kitapTuruComboBox.addItem("Deneme");
+          	kitapTuruComboBox.addItem("Bilim");
+          	String kitapTurleri[] = {"Hepsi", "Tarih", "Bilimkurgu", "İş Kitapları", "Dil Öğrenimi", "Çocuk", "Macera", "Gizem", "Korku", "Romantizm", "Grafik Roman", "Biyografi", "Otobiyografi", "Yemek", "Şiir", "Kılavuz", "Seyahat", "Albüm", "Deneme", "Bilim"};
           	int seciliKitapTuru = kitapTuruComboBox.getSelectedIndex();
+          	searchPanel.addComponent(kitapTuruComboBox);
           	
+            searchPanel.addComponent(new Label("Kitap Adı:"));
+            TextBox searchBoxKitapAdi = new TextBox(new TerminalSize(30, 1));
+            searchPanel.addComponent(searchBoxKitapAdi.withBorder(Borders.singleLine()));
+            
+            searchPanel.addComponent(new Label("Yazar:"));
+            TextBox searchBoxYazar = new TextBox(new TerminalSize(30, 1));
+            searchPanel.addComponent(searchBoxYazar.withBorder(Borders.singleLine()));
+            
+            searchPanel.addComponent(new Label("Yayınevi:"));
+            TextBox searchBoxYayinevi = new TextBox(new TerminalSize(30, 1));
+            searchPanel.addComponent(searchBoxYayinevi.withBorder(Borders.singleLine()));
+            
+            searchPanel.addComponent(new Label("Kütüphane:"));
+            TextBox searchBoxKutuphane = new TextBox(new TerminalSize(30, 1));
+            searchPanel.addComponent(searchBoxKutuphane.withBorder(Borders.singleLine()));
             
             //Call SamdanMechanic for searching
             searchPanel.addComponent(new Button("Ara", () -> {
                 tableModel.clear();
                 Table<String> tempTable = new Table<>("ISBN", "Kitap Adı", "Yazar", "Yayınevi", "Tür", "Sayfa Sayısı");
-                SamdanMechanic.searchBooks(gui, tempTable.getTableModel(), searchBox.getText(), seciliFiltre, seciliKitapTuru);
+                SamdanMechanic.searchBooks(gui, tempTable.getTableModel(), searchBoxKitapAdi.getTextOrDefault("0"), searchBoxYazar.getTextOrDefault("0"), searchBoxYayinevi.getTextOrDefault("0"), searchBoxKutuphane.getTextOrDefault("0"), kitapTurleri[seciliKitapTuru]);
                 
                 for (int i = 0; i < tempTable.getTableModel().getRowCount(); i++) {
                     List<String> srcRow = tempTable.getTableModel().getRow(i);
@@ -149,13 +170,14 @@ public class SamdanDashboard {
             }));
             
             searchPanel.addComponent(new Button("Filtreleri Temizle", () -> {
-                searchBox.setText("");
+                searchBoxKitapAdi.setText("");
+                searchBoxYazar.setText("");
+                searchBoxYayinevi.setText("");
+                searchBoxKutuphane.setText("");
                 loadAndFormatArchive.run();
                 updateSelectionIndicators.run();
             }));
           	
-          	searchPanel.addComponent(filtreComboBox);
-          	searchPanel.addComponent(kitapTuruComboBox);
           	mainPanel.addComponent(searchPanel);
           	
             //Action Buttons Panel
