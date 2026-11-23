@@ -1,7 +1,5 @@
 KITAP (kitapISBN (Key), kitapAdi, kitapTuru, kitapSayfaSayisi, kitapCikisYili, kitapBaskiSayisi)
 
-KOPYA (kitapISBN (FK: KITAP), kopyaNumarasi)
-
 YAZAR (yazarNumarasi (Key), yazarAdi)
 
 YAYINEVI (yayineviNumarasi (Key), yayineviAdi)
@@ -18,4 +16,4 @@ YAZARI OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
 
 YAYINEVI OLMA (kitapISBN (FK: KITAP), yayineviNumarasi (FK: YAYINEVI))
 
-KUTUPHANE BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi (FK: KİTAP), kutuphaneNumarasi (FK: KUTUPHANE))
+KUTUPHANE BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi (FK: KITAP), kutuphaneNumarasi (FK: KUTUPHANE))
