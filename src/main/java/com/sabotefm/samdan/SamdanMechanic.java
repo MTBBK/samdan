@@ -8,10 +8,15 @@ import java.sql.*;
 
 public class SamdanMechanic {
 
+    // for database connection
     private static String url;
-    private static String userName;
-    private static String password;
+    private static String databaseUser;
+    private static String databasePassword;
     private static Connection con;
+
+    // for user information
+    private static String userName;
+    private static String authorisation;
 
     // Getters
 
@@ -22,7 +27,7 @@ public class SamdanMechanic {
 
     // Authorization
     public static String getAuthorization() {
-        return "Admin";
+        return authorisation;
     }
 
     // Book Informations
@@ -39,20 +44,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kitapAdı
-                    FROM KİTAP
+                    SELECT kitapAdi
+                    FROM KITAP
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kitapAdı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kitapAdi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -72,20 +73,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT yazarNumarası
-                    FROM YAZARI_OLMA
+                    SELECT yazarNumarasi
+                    FROM "YAZARI OLMA"
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("yazarNumarası");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("yazarNumarasi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -105,20 +102,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT yayıneviNumarası
-                    FROM YAYINEVİ_OLMA
+                    SELECT yayineviNumarasi
+                    FROM "YAYINEVI OLMA"
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("yayıneviNumarası");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("yayineviNumarasi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -138,20 +131,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kütüphaneNumarası
-                    FROM KÜTÜPHANEDE_BULUNMA
+                    SELECT kutuphaneNumarasi
+                    FROM "KUTUPHANEDE BULUNMA"
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kütüphaneNumarası");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kutuphaneNumarasi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -171,20 +160,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kütüphaneKonumu
-                    FROM KÜTÜPHANEDE_BULUNMA
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    SELECT kutuphaneKonumu
+                    FROM "KUTUPHANEDE BULUNMA" Y, KUTUPHANE K
+                    WHERE kitapISBN=""" + selectedIsbn + " AND K.kutuphaneNumarasi=Y.kutuphaneKonumu;";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kütüphaneKonumu");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kütüphaneKonumu");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -206,20 +191,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kitapBaskıSayısı
-                    FROM KİTAP
+                    SELECT kitapBaskiSayisi
+                    FROM KITAP
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kitapBaskıSayısı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kitapBaskiSayisi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -239,20 +220,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kitapÇıkışYılı
-                    FROM KİTAP
+                    SELECT kitapCikisYili
+                    FROM KITAP
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kitapÇıkışYılı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kitapCikisYili");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -275,20 +252,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT yazarAdı
-                    FROM YAZAR Y, YAZARI_OLMA K
-                    WHERE K.kitapISBN=""" + selectedIsbn + " AND K.yazarNumarası=Y.yazarNumarası;";
+                    SELECT yazarAdi
+                    FROM YAZAR Y, "YAZARI OLMA" K
+                    WHERE K.kitapISBN=""" + selectedIsbn + " AND K.yazarNumarasi=Y.yazarNumarasi;";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("yazarAdı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("yazarAdi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -309,20 +282,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT yayıneviAdı
-                    FROM YAYINEVİ_OLMA K, YAYINEVİ Y
-                    WHERE kitapISBN=""" + selectedIsbn + " AND K.yayıneviNumarası=Y.yayıneviNumarası;";
+                    SELECT yayineviAdi
+                    FROM "YAYINEVI OLMA" K, YAYINEVI Y
+                    WHERE kitapISBN=""" + selectedIsbn + " AND K.yayineviNumarasi=Y.yayineviNumarasi;";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("yayıneviAdı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("yayineviAdi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -343,20 +312,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kütüphaneAdı
-                    FROM KÜTÜPHANEDE_BULUNMA K, KÜTÜPHANE Y
-                    WHERE kitapISBN=""" + selectedIsbn + " AND K.yayıneviNumarası=Y.yayıneviNumarası;";
+                    SELECT kütüphaneAdi
+                    FROM "KUTUPHANEDE BULUNMA" K, KUTUPHANE Y
+                    WHERE kitapISBN=""" + selectedIsbn + " AND K.kutuphaneNumarasi=Y.kutuphaneNumarasi;";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kütüphaneAdı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kütüphaneAdi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -377,20 +342,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kitapTürü
-                    FROM KİTAP K
+                    SELECT kitapTuru
+                    FROM KITAP K
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kitapTürü");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kitapTuru");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -412,20 +373,16 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
 
             String query = """
-                    SELECT kitapSayfaSayısı
-                    FROM KİTAP K
+                    SELECT kitapSayfaSayisi
+                    FROM KITAP K
                     WHERE kitapISBN=""" + selectedIsbn + ";";
 
             rs = stmt.executeQuery(query);
             stmt.close();
 
-            if (null == rs) {
-                return null;
-            } else {
-                String answer = rs.getString("kitapSayfaSayısı");
-                rs.close();
-                return answer;
-            }
+            String answer = rs.getString("kitapSayfaSayisi");
+            rs.close();
+            return answer;
 
         } catch (SQLException e) {
             String SQL_STATE = e.getSQLState();
@@ -436,47 +393,225 @@ public class SamdanMechanic {
     }
 
     // Login
-    public static void loginToSamdan(WindowBasedTextGUI gui, String userName, String passWord) {
-        SamdanDashboard.showDashboard();
+    public static void loginToSamdan(WindowBasedTextGUI gui, String username, String passWord) {
+
+        userName = null;
+        authorisation = null;
+
+        String passAnswer = null;
+        String authAnswer = null;
+
+        try {
+            ResultSet rs = null;
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT sifre, yetkiSeviyesi
+                    FROM KULLANICI K
+                    WHERE kullaniciAdi=""" + username + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            passAnswer = rs.getString("sifre");
+            authAnswer = rs.getString("yetkiSeviyesi");
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        if (null == passAnswer) {
+            // throw error "wrong password or username"
+            popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
+        } else if (!passWord.equals(passAnswer)) {
+            // throw error "wrong password or username"
+            popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
+        } else if (null == authAnswer) {
+            // throw error "user's auth level couldn't be found"
+            popUpMakerOK(gui, "Error: Yetki seviyesi bulunamadi", "Yetki seviyesi bulunamadi");
+        } else {
+            username = userName;
+            authorisation = authAnswer;
+            SamdanDashboard.showDashboard();
+        }
+
     }
 
     // Send Ratings
     public static void saveRatings(WindowBasedTextGUI gui, String selectedIsbn, int points, String evalution) {
-        // Save ratings
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String searchQuery = """
+                    SELECT kitapSayfaSayisi
+                    FROM DEGERLENDIRME K
+                    WHERE kitapISBN=""" + selectedIsbn + "AND kullaniciAdi= " + userName + ";";
+            ;
+            rs = stmt.executeQuery(searchQuery);
+
+            String userAnswer = rs.getString("kullaniciAdi");
+            rs.close();
+
+            if (null == userAnswer) {
+                String insertQuery = """
+                        INSERT INTO DEGERLENDIRME
+                        VALUES (""" + selectedIsbn + ", " + userName + ", " + evalution + ", " + points + ");";
+                stmt.executeQuery(insertQuery);
+            } else {
+                String updateQuery = null;
+                if (null == evalution) {
+                    updateQuery = """
+                            UPDATE DEGERLENDIRME
+                            SET puan = """ + points + """
+                            WHERE kitapISBN=""" + selectedIsbn + "AND kullaniciAdi= " + userName + ";";
+                } else {
+                    updateQuery = """
+                            UPDATE DEGERLENDIRME
+                            SET puan = """ + points + ", degerlendirme = " + evalution + """
+                            WHERE kitapISBN=""" + selectedIsbn + "AND kullaniciAdi= " + userName + ";";
+                }
+                stmt.executeQuery(updateQuery);
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
     }
 
     // Load book table data
     public static void loadBookArchive(WindowBasedTextGUI gui, TableModel<String> tableModel) {
         tableModel.clear();
-        // TODO: Replace with MySQL database queries for KİTAP TABLOSU, YAZAR TABLOSU,
-        // etc.
-        tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
-        tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali", "Yapı Kredi", "Roman", "160");
-        tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü", "Ahmet Hamdi Tanpınar", "Dergah", "Roman",
-                "396");
+
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapISBN, kitapAdi, yazarAdi, yayineviAdi, kitapTuru, kitapSayfaSayisi
+                    FROM KITAP K
+                    INNER JOIN "YAZARI OLMA" Y ON K.kitapISBN=Y.kitapISBN
+                    INNER JOIN YAZAR B ON B.yazarNumarasi=Y.yazarNumarasi;""";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[6];
+                for (int i = 0; i < 6; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        /*
+         * tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk",
+         * "Millî Eğitim", "Tarih", "550");
+         * tableModel.addRow("978-973...", "Kürk Mantadolu Madonna", "Sabahattin Ali",
+         * "Yapı Kredi", "Roman", "160");
+         * tableModel.addRow("978-970...", "Saatleri Ayarlama Enstitüsü",
+         * "Ahmet HamdiTanpınar", "Dergah", "Roman", "396");
+         */
     }
 
     // Load ratings table data for users
     public static void loadRatingsTableForUsers(WindowBasedTextGUI gui, TableModel<String> tableModel) {
         tableModel.clear();
-        // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR
-        // TABLOSU,
-        // etc.
-        tableModel.addRow("Nutuk", "8/10", "Tarihiydi");
-        tableModel.addRow("Kestane Gürgen Palamut", "7/10", "Altı Yaprak Üstü Bulut");
-        tableModel.addRow("Kürk Mantadolu Madonna", "6/10", "Sabahattin Aliliydi");
+
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT kitapAdi, puan, degerlendirme
+                    FROM KITAP K
+                    INNER JOIN DEGERLENDIRME Y ON K.kitapISBN=Y.kitapISBN;""";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[3];
+                for (int i = 0; i < 3; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1] + "/10", entry[2]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        // tableModel.addRow("Nutuk", "8/10", "Tarihiydi");
+        // tableModel.addRow("Kestane Gürgen Palamut", "7/10", "Altı Yaprak Üstü
+        // Bulut");
+        // tableModel.addRow("Kürk Mantadolu Madonna", "6/10", "Sabahattin Aliliydi");
     }
 
     // Load ratings table data for a single book
     public static void loadRatingsTableForABook(WindowBasedTextGUI gui, TableModel<String> tableModel,
             String selectedIsbn) {
         tableModel.clear();
-        // TODO: Replace with MySQL database queries for DEĞERLENDİRME TABLOSU, OKUR
-        // TABLOSU,
-        // etc.
-        tableModel.addRow("Emre Karaduman", "8/10", "no way");
-        tableModel.addRow("Melih Efe Tursun", "7/10", "Çok iyi");
-        tableModel.addRow("Osman Kuru", "6/10", "Osman");
+
+        try {
+            ResultSet rs = null;
+
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = """
+                    SELECT gercekAdi, puan, degerlendirme
+                    FROM KITAP K
+                    INNER JOIN DEGERLENDIRME Y ON K.kitapISBN=Y.kitapISBN
+                    INNER JOIN KULLANICI A ON Y.kullaniciAdi=A.kullaniciAdi
+                    WHERE K.kitapISBN=""" + selectedIsbn + ";";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[3];
+                for (int i = 0; i < 3; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1] + "/10", entry[2]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+        }
+
+        // tableModel.addRow("Emre Karaduman", "8/10", "no way");
+        // tableModel.addRow("Melih Efe Tursun", "7/10", "Çok iyi");
+        // tableModel.addRow("Osman Kuru", "6/10", "Osman");
     }
 
     // Handle book search functionality
@@ -618,7 +753,7 @@ public class SamdanMechanic {
 
         try {
             // Establish Connection
-            connection = DriverManager.getConnection(url, userName, password);
+            connection = DriverManager.getConnection(url, databaseUser, databasePassword);
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             System.out.println("SQL State: " + e.getSQLState());
@@ -627,5 +762,9 @@ public class SamdanMechanic {
 
         con = connection;
         return;
+    }
+
+    private static void getDatabaseUser() {
+        // TODO: gets database user's username and password with some dark magic
     }
 }
