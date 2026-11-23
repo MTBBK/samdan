@@ -1,19 +1,29 @@
-KITAP (kitapISBN (Key), kitapAdi, kitapTuru, kitapSayfaSayisi, kitapCikisYili, kitapBaskiSayisi)
+KITAP (kitapISBN, kitapAdi, kitapTuru, kitapSayfaSayisi, kitapCikisYili, kitapBaskiSayisi)
+- Primary Key: (kitapISBN)
 
-YAZAR (yazarNumarasi (Key), yazarAdi)
+YAZAR (yazarNumarasi, yazarAdi)
+- Primary Key: (yazarNumarasi)
 
-YAYINEVI (yayineviNumarasi (Key), yayineviAdi)
+YAYINEVI (yayineviNumarasi, yayineviAdi)
+- Primary Key: (yayineviNumarasi)
 
-KUTUPHANE (kutuphaneNumarasi (Key), kutuphaneAdi, kutuphaneKonumu)
+KUTUPHANE (kutuphaneNumarasi, kutuphaneAdi, kutuphaneKonumu)
+- Primary Key: (kutuphaneNumarasi)
 
-KULLANICI (kullaniciAdi (Key), gercekAdi, sifre, yetkiSeviyesi, okurYasi)
+KULLANICI (kullaniciAdi, gercekAdi, sifre, yetkiSeviyesi, okurYasi, tcno)
+- Primary Key: (kullaniciAdi)
 
 DEGERLENDIRME (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI), degerlendirme, puan)
+- Primary Key: (kitapISBN, kullaniciAdi)
 
-ARIYET (kitapISBN (FK: KITAP), kopyaNumarasi, kullaniciAdi (FK: KULLANICI))
+ARIYET ((kitapISBN, kopyaNumarasi , kutuphaneNumarasi) (FK: KUTUPHANE BULUNMA), kullaniciAdi (FK: KULLANICI))
+- Primary Key: (kitapISBN, kopyaNumarasi , kutuphaneNumarasi)
 
 YAZARI OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
+- Primary Key: (kitapISBN, yazarNumarasi)
 
 YAYINEVI OLMA (kitapISBN (FK: KITAP), yayineviNumarasi (FK: YAYINEVI))
+- Primary Key: (kitapISBN, yayineviNumarasi)
 
 KUTUPHANE BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi, kutuphaneNumarasi (FK: KUTUPHANE))
+- Primary Key: (kitapISBN, kopyaNumarasi , kutuphaneNumarasi)
