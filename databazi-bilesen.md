@@ -1,5 +1,7 @@
 KITAP (kitapISBN (Key), kitapAdi, kitapTuru, kitapSayfaSayisi, kitapCikisYili, kitapBaskiSayisi)
 
+KOPYA (kitapISBN (FK: KITAP), KopyaNumarasi)
+
 YAZAR (yazarNumarasi (Key), yazarAdi)
 
 YAYINEVI (yayineviNumarasi (Key), yayineviAdi)
@@ -10,7 +12,7 @@ KULLANICI (kullaniciAdi (Key), gercekAdi, sifre, yetkiSeviyesi, okurYasi)
 
 DEGERLENDIRME (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI), degerlendirme, puan)
 
-ARIYET (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI))
+ARIYET (kitapISBN (FK: KITAP), KopyaNumarasi (FK: KOPYA), kullaniciAdi (FK: KULLANICI))
 
 YAZARI OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
 
