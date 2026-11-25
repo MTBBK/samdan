@@ -19,9 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class SamdanKullanici {
+public class SamdanYonetici {
 
-    public static void showKullanici() {
+    public static void showYonetici() {
         try {
             Terminal terminal = new DefaultTerminalFactory().createTerminal();
             Screen screen = new TerminalScreen(terminal);
@@ -41,70 +41,83 @@ public class SamdanKullanici {
             TextColor araplanRengi = new TextColor.RGB(255, 90, 90);
             
            	MultiWindowTextGUI gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(araplanRengi));
-            BasicWindow window = new BasicWindow("Şamdan - Kullanıcı Sayfası");
+            BasicWindow window = new BasicWindow("Şamdan - Yönetici Sayfası");
             window.setHints(Arrays.asList(Window.Hint.CENTERED));
             window.setTheme(customTheme);
 
             Panel mainPanel = new Panel(new GridLayout(1));
 			
-			new Label("Kullanıcı Adı: " + SamdanMechanic.getUserName()).addTo(mainPanel);
-			new Label("Yetki: " + SamdanMechanic.getAuthorization()).addTo(mainPanel);
-			
-			mainPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(2)));
-			
-			Table<String> ratingsTable = new Table<>("[ ]", "Kitap Adı", "Puan", "Değerlendirme");
-			ratingsTable.setSelectAction( ()-> SamdanDashboard.showDashboard());
-			TableModel<String> tableModel = ratingsTable.getTableModel();
-
-            // Track the explicitly selected row index (-1 means none selected yet)
-            final int[] confirmedSelectedRow = {-1};
-
-            // Helper to load and format table data with the [ ] selection column
-            Runnable loadAndFormatArchive = () -> {
-                tableModel.clear();
-                Table<String> tempTable = new Table<>("Kitap Adı", "Puan", "Değerlendirme");
-                SamdanMechanic.loadRatingsTableForUsers(gui, tempTable.getTableModel());
-                
-                for (int i = 0; i < tempTable.getTableModel().getRowCount(); i++) {
-                    List<String> srcRow = tempTable.getTableModel().getRow(i);
-                    List<String> newRow = new ArrayList<>();
-                    newRow.add("[ ]");
-                    newRow.addAll(srcRow);
-                    tableModel.addRow(newRow.toArray(new String[0]));
-                }
-                confirmedSelectedRow[0] = -1;
-            };
-
-            loadAndFormatArchive.run();
-
-            // Helper to update selection indicators based on the confirmed selection
-            Runnable updateSelectionIndicators = () -> {
-                int currentHighlight = ratingsTable.getSelectedRow();
-                // If the user hits enter or explicitly interacts, we can lock in the highlighted row
-                if (currentHighlight >= 0) {
-                    confirmedSelectedRow[0] = currentHighlight;
-                }
-
-                for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    String indicator = (i == confirmedSelectedRow[0] && confirmedSelectedRow[0] >= 0) ? "[*]" : "[ ]";
-                    if (tableModel.getColumnCount() > 0) {
-                        tableModel.setCell(0, i, indicator);
-                    }
-                }
-            };
-
-            // When user presses Enter or triggers selection action on a row
-            ratingsTable.setSelectAction(() -> {
-                int currentHighlight = ratingsTable.getSelectedRow();
-                if (currentHighlight >= 0) {
-                    confirmedSelectedRow[0] = currentHighlight;
-                    updateSelectionIndicators.run();
-                }
-            });
+            //Kitap Ekleme Text Box
+            //kitapISBN, kitapAdi, kitapTuru, kitapSayfaSayisi, kitapCikisYili, kitapBaskiSayisi
+            Panel kitapOzellikleriPanel = new Panel(new GridLayout(3));
             
-            updateSelectionIndicators.run();
+            TextBox kitapISBNTextBox = new TextBox(new TerminalSize(40, 1));
+            kitapISBNTextBox.setValidationPattern(Pattern.compile("^[0-9]{0,13}$"));
+			kitapOzellikleriPanel.addComponent(kitapISBNTextBox.withBorder(Borders.singleLine("ISBN")));
+			
+            TextBox kitapAdiTextBox = new TextBox(new TerminalSize(40, 1));
+            kitapAdiTextBox.setValidationPattern(Pattern.compile("^[a-zA-Z0-9_ ]{0,30}$"));
+			kitapOzellikleriPanel.addComponent(kitapAdiTextBox.withBorder(Borders.singleLine("Kitap Adı")));
+			
+            TextBox kitapTuruTextBox = new TextBox(new TerminalSize(40, 1));
+            kitapTuruTextBox.setValidationPattern(Pattern.compile("^[a-zA-Z ]{0,30}$"));
+			kitapOzellikleriPanel.addComponent(kitapTuruTextBox.withBorder(Borders.singleLine("Kitap Türü")));
+			
+            TextBox kitapSayfaSayisiTextBox = new TextBox(new TerminalSize(40, 1));
+            kitapSayfaSayisiTextBox.setValidationPattern(Pattern.compile("^[0-9]{0,10}$"));
+			kitapOzellikleriPanel.addComponent(kitapSayfaSayisiTextBox.withBorder(Borders.singleLine("Sayfa Sayısı")));
+			
+            TextBox kitapCikisYiliTextBox = new TextBox(new TerminalSize(40, 1));
+            kitapCikisYiliTextBox.setValidationPattern(Pattern.compile("^[0-9]{0,4}$"));
+			kitapOzellikleriPanel.addComponent(kitapCikisYiliTextBox.withBorder(Borders.singleLine("Çıkış Yılı")));
+			
+            TextBox kitapBaskiSayisiTextBox = new TextBox(new TerminalSize(40, 1));
+            kitapBaskiSayisiTextBox.setValidationPattern(Pattern.compile("^[0-9]{0,5}$"));
+			kitapOzellikleriPanel.addComponent(kitapBaskiSayisiTextBox.withBorder(Borders.singleLine("Baskı Sayısı")));
+			
+			//Yeni Kitap Ekle Butonu
+			kitapOzellikleriPanel.addComponent(new Button("Yeni Kitabı Ekle", () -> SamdanMechanic.addNewBook(gui, kitapISBNTextBox.getText(), kitapAdiTextBox.getText(), kitapTuruTextBox.getText(), kitapSayfaSayisiTextBox.getText(), kitapCikisYiliTextBox.getText(), kitapBaskiSayisiTextBox.getText())));
             
-            mainPanel.addComponent(ratingsTable.withBorder(Borders.singleLine("Değerlendirmeler")));
+            
+            
+            //Kullanıcı Ekleme Text Box
+            //kullaniciAdi, gercekAdi, sifre, yetkiSeviyesi, okurYasi, TCNO
+            Panel kullanıcıOzellikleriPanel = new Panel(new GridLayout(3));
+            
+            TextBox kullaniciAdiTextBox = new TextBox(new TerminalSize(40, 1));
+            kullaniciAdiTextBox.setValidationPattern(Pattern.compile("^[a-zA-Z0-9_ ]{0,30}$"));
+			kullanıcıOzellikleriPanel.addComponent(kullaniciAdiTextBox.withBorder(Borders.singleLine("Kullanıcı Adı")));
+			
+            TextBox gercekAdiTextBox = new TextBox(new TerminalSize(40, 1));
+            gercekAdiTextBox.setValidationPattern(Pattern.compile("^[a-zA-Z ]{0,30}$"));
+			kullanıcıOzellikleriPanel.addComponent(gercekAdiTextBox.withBorder(Borders.singleLine("Gerçek Ad")));
+			
+            TextBox sifreTextBox = new TextBox(new TerminalSize(40, 1));
+            sifreTextBox.setValidationPattern(Pattern.compile("^[a-zA-Z0-9_ ]{0,30}$"));
+			kullanıcıOzellikleriPanel.addComponent(sifreTextBox.withBorder(Borders.singleLine("Şifre")));
+			
+            TextBox yetkiSeviyesiTextBox = new TextBox(new TerminalSize(40, 1));
+            yetkiSeviyesiTextBox.setValidationPattern(Pattern.compile("^[a-zA-Z ]{0,30}$"));
+			kullanıcıOzellikleriPanel.addComponent(yetkiSeviyesiTextBox.withBorder(Borders.singleLine("Yetki Seviyesi")));
+			
+            TextBox okurYasiTextBox = new TextBox(new TerminalSize(40, 1));
+            okurYasiTextBox.setValidationPattern(Pattern.compile("^[0-9]{0,10}$"));
+			kullanıcıOzellikleriPanel.addComponent(okurYasiTextBox.withBorder(Borders.singleLine("Okur Yaşı")));
+			
+            TextBox TCNOTextBox = new TextBox(new TerminalSize(40, 1));
+            TCNOTextBox.setValidationPattern(Pattern.compile("^[0-9]{0,11}$"));
+			kullanıcıOzellikleriPanel.addComponent(TCNOTextBox.withBorder(Borders.singleLine("T.C. NO")));
+			
+			//Yeni Kullanıcı Ekle Butonu
+			kullanıcıOzellikleriPanel.addComponent(new Button("Yeni Kullanıcıyı Ekle", () -> SamdanMechanic.addNewUser(gui, kullaniciAdiTextBox.getText(), gercekAdiTextBox.getText(), sifreTextBox.getText(), yetkiSeviyesiTextBox.getText(), okurYasiTextBox.getText(), TCNOTextBox.getText())));
+            
+            
+
+			new Label("Yeni Kitap: ").addTo(mainPanel);
+            mainPanel.addComponent(kitapOzellikleriPanel);
+            mainPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(2)));
+            new Label("Yeni Kullanıcı: ").addTo(mainPanel);
+            mainPanel.addComponent(kullanıcıOzellikleriPanel);
             
             
             //Zemin Panel

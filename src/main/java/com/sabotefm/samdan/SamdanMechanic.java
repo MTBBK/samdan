@@ -615,8 +615,7 @@ public class SamdanMechanic {
     }
 
     // Handle book search functionality
-    public static void searchBooks(WindowBasedTextGUI gui, TableModel<String> tableModel, String arananKelime,
-            int seciliFiltre, int seciliKitapTuru) {
+    public static void searchBooks(WindowBasedTextGUI gui, TableModel<String> tableModel, String kitapAdi, String yazarAdi, String yayineviAdi, String kutuphaneAdi, String kitapTuru) {
         if (arananKelime == null || arananKelime.trim().isEmpty()) {
             String title = "Uyarı";
             String message = "Lütfen aranacak bir kelime veya ISBN girin.";
@@ -646,7 +645,15 @@ public class SamdanMechanic {
             tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
         }
     }
+    
+    public static void addNewBook(WindowBasedTextGUI gui, String kitapISBN, String kitapAdi, String kitapTuru, String kitapSayfaSayisi, String kitapCikisYili, String kitapBaskiSayisi){
+		//Function to add new book to database
+	}
 
+	public static void addNewUser(WindowBasedTextGUI gui, String kullaniciAdi, String gercekAdi, String sifre, String yetkiSeviyesi, String okurYasi, String TCNO){
+		//Function to add new user to database
+	}
+	
     // Handle marking a book as acquired by the user (Kitap Edinme)
     public static void markBookAsBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
