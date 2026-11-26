@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CreateLibrarySchema {
+public class DatabaziUretici {
 
     private static final int BATCH_SIZE = 2500;
 
@@ -191,7 +191,7 @@ public class CreateLibrarySchema {
                           "Barbaros", "Mesut", "Michael", "Goku" , "Vegeta", "Jotaro", "Dio", "Kakyoin", "Recaizade Mahmut"
         };
         String[] soyadlar = {"Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Yıldırım", "Öztürk", "Aydın", "Özdemir",
-                             "Arslan", "Doğan", "Kılıç", "Aslan", "Çetin", "Kara", "Koç", "Kurt", "Özkan", "Şimşek", "Ali"
+                             "Arslan", "Doğan", "Kılıç", "Aslan", "Çetin", "Kara", "Koç", "Kurt", "Özkan", "Şimşek", "Ali",
                              "Gergin", "Köş", "Jackson", "Jackson Jr.", "Kujo", "Brando" , "Ekrem" 
         };
 
