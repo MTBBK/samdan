@@ -9,9 +9,9 @@ import java.sql.*;
 public class SamdanMechanic {
 
     // for database connection
-    private static String url;
-    private static String databaseUser;
-    private static String databasePassword;
+    private static String url = "jdbc:mysql://localhost:3306/samdan_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true";
+    private static String databaseUser = "kutuphane-admin";
+    private static String databasePassword = "Passw0rd..";
     private static Connection con;
 
     // for user information
