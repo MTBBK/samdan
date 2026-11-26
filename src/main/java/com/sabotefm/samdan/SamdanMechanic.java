@@ -46,10 +46,9 @@ public class SamdanMechanic {
             String query = """
                     SELECT kitapAdi
                     FROM KITAP
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kitapAdi");
             rs.close();
@@ -74,11 +73,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT yazarNumarasi
-                    FROM "YAZARI OLMA"
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    FROM "YAZARI_OLMA"
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("yazarNumarasi");
             rs.close();
@@ -103,11 +101,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT yayineviNumarasi
-                    FROM "YAYINEVI OLMA"
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    FROM "YAYINEVI_OLMA"
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("yayineviNumarasi");
             rs.close();
@@ -132,11 +129,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT kutuphaneNumarasi
-                    FROM "KUTUPHANEDE BULUNMA"
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    FROM "KUTUPHANE_BULUNMA"
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kutuphaneNumarasi");
             rs.close();
@@ -161,11 +157,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT kutuphaneKonumu
-                    FROM "KUTUPHANEDE BULUNMA" Y, KUTUPHANE K
-                    WHERE kitapISBN=""" + selectedIsbn + " AND K.kutuphaneNumarasi=Y.kutuphaneKonumu;";
+                    FROM "KUTUPHANE_BULUNMA" Y, KUTUPHANE K
+                    WHERE kitapISBN='""" + selectedIsbn + "' AND K.kutuphaneNumarasi=Y.kutuphaneKonumu;";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kütüphaneKonumu");
             rs.close();
@@ -193,10 +188,9 @@ public class SamdanMechanic {
             String query = """
                     SELECT kitapBaskiSayisi
                     FROM KITAP
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kitapBaskiSayisi");
             rs.close();
@@ -222,10 +216,9 @@ public class SamdanMechanic {
             String query = """
                     SELECT kitapCikisYili
                     FROM KITAP
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kitapCikisYili");
             rs.close();
@@ -253,11 +246,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT yazarAdi
-                    FROM YAZAR Y, "YAZARI OLMA" K
-                    WHERE K.kitapISBN=""" + selectedIsbn + " AND K.yazarNumarasi=Y.yazarNumarasi;";
+                    FROM YAZAR Y, "YAZARI_OLMA" K
+                    WHERE K.kitapISBN='""" + selectedIsbn + "' AND K.yazarNumarasi=Y.yazarNumarasi;";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("yazarAdi");
             rs.close();
@@ -283,11 +275,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT yayineviAdi
-                    FROM "YAYINEVI OLMA" K, YAYINEVI Y
-                    WHERE kitapISBN=""" + selectedIsbn + " AND K.yayineviNumarasi=Y.yayineviNumarasi;";
+                    FROM "YAYINEVI_OLMA" K, YAYINEVI Y
+                    WHERE kitapISBN='""" + selectedIsbn + "' AND K.yayineviNumarasi=Y.yayineviNumarasi;";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("yayineviAdi");
             rs.close();
@@ -313,11 +304,10 @@ public class SamdanMechanic {
 
             String query = """
                     SELECT kütüphaneAdi
-                    FROM "KUTUPHANEDE BULUNMA" K, KUTUPHANE Y
-                    WHERE kitapISBN=""" + selectedIsbn + " AND K.kutuphaneNumarasi=Y.kutuphaneNumarasi;";
+                    FROM "KUTUPHANE_BULUNMA" K, KUTUPHANE Y
+                    WHERE kitapISBN='""" + selectedIsbn + "' AND K.kutuphaneNumarasi=Y.kutuphaneNumarasi;";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kütüphaneAdi");
             rs.close();
@@ -344,10 +334,9 @@ public class SamdanMechanic {
             String query = """
                     SELECT kitapTuru
                     FROM KITAP K
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kitapTuru");
             rs.close();
@@ -375,10 +364,9 @@ public class SamdanMechanic {
             String query = """
                     SELECT kitapSayfaSayisi
                     FROM KITAP K
-                    WHERE kitapISBN=""" + selectedIsbn + ";";
+                    WHERE kitapISBN='""" + selectedIsbn + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             String answer = rs.getString("kitapSayfaSayisi");
             rs.close();
@@ -507,11 +495,10 @@ public class SamdanMechanic {
             String query = """
                     SELECT kitapISBN, kitapAdi, yazarAdi, yayineviAdi, kitapTuru, kitapSayfaSayisi
                     FROM KITAP K
-                    INNER JOIN "YAZARI OLMA" Y ON K.kitapISBN=Y.kitapISBN
+                    INNER JOIN "YAZARI_OLMA" Y ON K.kitapISBN=Y.kitapISBN
                     INNER JOIN YAZAR B ON B.yazarNumarasi=Y.yazarNumarasi;""";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
             while (rs.next()) {
                 String[] entry = new String[6];

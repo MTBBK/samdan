@@ -20,11 +20,11 @@ DEGERLENDIRME (kitapISBN (FK: KITAP), kullaniciAdi (FK: KULLANICI), degerlendirm
 ARIYET ((kitapISBN, kopyaNumarasi , kutuphaneNumarasi) (FK: KUTUPHANE BULUNMA), kullaniciAdi (FK: KULLANICI))
 - Primary Key: (kitapISBN, kopyaNumarasi , kutuphaneNumarasi)
 
-YAZARI OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
+YAZARI_OLMA (kitapISBN (FK: KITAP), yazarNumarasi (FK: YAZAR))
 - Primary Key: (kitapISBN, yazarNumarasi)
 
-YAYINEVI OLMA (kitapISBN (FK: KITAP), yayineviNumarasi (FK: YAYINEVI))
+YAYINEVI_OLMA (kitapISBN (FK: KITAP), yayineviNumarasi (FK: YAYINEVI))
 - Primary Key: (kitapISBN, yayineviNumarasi)
 
-KUTUPHANE BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi, kutuphaneNumarasi (FK: KUTUPHANE))
+KUTUPHANE_BULUNMA (kitapISBN (FK: KITAP), kopyaNumarasi, kutuphaneNumarasi (FK: KUTUPHANE))
 - Primary Key: (kitapISBN, kopyaNumarasi , kutuphaneNumarasi)
