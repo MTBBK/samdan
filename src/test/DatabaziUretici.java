@@ -300,7 +300,7 @@ public class DatabaziUretici {
         String[] soyadlar = {"Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Arslan", "Doğan",
                              "Oğuzoğulları", "Yıldırımoğulları", "Kayaoğulları", "Mehmetoğulları", "Karaduman", "Karadoğan",
                              "Darksmoke", "Popsmoke", "Jackson", "Brown", "Brown Jr.", "Köş", "Escobar", "Saraç", "Peker",
-                             "Kuru", "Oğuz Tekin", "Uzunpostalcı", "Kılınç", "Tursun", "Dursun", "Joestar" "Nabir"
+                             "Kuru", "Oğuz Tekin", "Uzunpostalcı", "Kılınç", "Tursun", "Dursun", "Joestar", "Nabir"
         };
 
         String sql = "INSERT IGNORE INTO KULLANICI (kullaniciAdi, gercekAdi, sifre, yetkiSeviyesi, okurYasi, TCNO) " +
