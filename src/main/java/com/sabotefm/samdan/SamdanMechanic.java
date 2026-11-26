@@ -615,45 +615,62 @@ public class SamdanMechanic {
     }
 
     // Handle book search functionality
-    public static void searchBooks(WindowBasedTextGUI gui, TableModel<String> tableModel, String kitapAdi, String yazarAdi, String yayineviAdi, String kutuphaneAdi, String kitapTuru) {
-        if (arananKelime == null || arananKelime.trim().isEmpty()) {
-            String title = "Uyarı";
-            String message = "Lütfen aranacak bir kelime veya ISBN girin.";
-            popUpMakerOK(gui, title, message);
-            return;
-        } else {
-            tableModel.clear();
-            // TODO: Query MySQL database matching name, author, or ISBN
-            // arananKelime -> Aranan Kelime String
+    public static void searchBooks(WindowBasedTextGUI gui, TableModel<String> tableModel, String kitapAdi,
+            String yazarAdi, String yayinEvi, String kutuphaneAdi,
+            String kitapTuru) {
 
-            // Seçili Filtre:
-            // 0-Kitap Adı
-            // 1-Yazar
-            // 2-Yayınevi
-            // 3-Kütüphane
+        // SamdanMechanic.searchBooks(gui, tempTable.getTableModel(),
+        // searchBoxKitapAdi.getText(), searchBoxYazar.getText(),
+        // searchBoxYayinevi.getText(), searchBoxKutuphane.getText(),
+        // kitapTurleri[seciliKitapTuru]);
 
-            // Secili Kitap Turu:
-            // 0-Hepsi
-            // 1-Roman
-            // 2-Hikaye
-            // 3-Şiir
-            // 4-Destan
+        try {
+            ResultSet rs = null;
 
-            tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
-            tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
-            tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
-            tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî Eğitim", "Tarih", "550");
+            establishConnection();
+
+            Statement stmt = con.createStatement();
+
+            String query = "";
+
+            rs = stmt.executeQuery(query);
+            stmt.close();
+
+            while (rs.next()) {
+                String[] entry = new String[3];
+                for (int i = 0; i < 3; i++) {
+                    entry[i] = rs.getString(i);
+                }
+                tableModel.addRow(entry[0], entry[1] + "/10", entry[2]);
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
         }
-    }
-    
-    public static void addNewBook(WindowBasedTextGUI gui, String kitapISBN, String kitapAdi, String kitapTuru, String kitapSayfaSayisi, String kitapCikisYili, String kitapBaskiSayisi){
-		//Function to add new book to database
-	}
 
-	public static void addNewUser(WindowBasedTextGUI gui, String kullaniciAdi, String gercekAdi, String sifre, String yetkiSeviyesi, String okurYasi, String TCNO){
-		//Function to add new user to database
-	}
-	
+        // tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî
+        // Eğitim", "Tarih", "550");
+        // tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî
+        // Eğitim", "Tarih", "550");
+        // tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî
+        // Eğitim", "Tarih", "550");
+        // tableModel.addRow("978-975...", "Nutuk", "Mustafa Kemal Atatürk", "Millî
+        // Eğitim", "Tarih", "550");
+    }
+
+    public static void addNewBook(WindowBasedTextGUI gui, String kitapISBN, String kitapAdi, String kitapTuru,
+            String kitapSayfaSayisi, String kitapCikisYili, String kitapBaskiSayisi) {
+        // Function to add new book to database
+    }
+
+    public static void addNewUser(WindowBasedTextGUI gui, String kullaniciAdi, String gercekAdi, String sifre,
+            String yetkiSeviyesi, String okurYasi, String TCNO) {
+        // Function to add new user to database
+    }
+
     // Handle marking a book as acquired by the user (Kitap Edinme)
     public static void markBookAsBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
