@@ -413,24 +413,29 @@ public class SamdanMechanic {
                     WHERE kullaniciAdi='""" + username + "';";
 
             rs = stmt.executeQuery(query);
-            stmt.close();
 
-            passAnswer = rs.getString("sifre");
-            authAnswer = rs.getString("yetkiSeviyesi");
-
-            if (null == passAnswer) {
-                // throw error "wrong password or username"
-                popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
-            } else if (!passWord.equals(passAnswer)) {
-                // throw error "wrong password or username"
-                popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
-            } else if (null == authAnswer) {
-                // throw error "user's auth level couldn't be found"
-                popUpMakerOK(gui, "Error: Yetki seviyesi bulunamadi", "Yetki seviyesi bulunamadi");
+            if (!rs.next()) {
+                // No matching user found
+                popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre",
+                        "Yanlis kullanici adi veya sifre" + "\nKullanıcı: " + username + "Sifre: " + passWord);
             } else {
-                username = userName;
-                authorisation = authAnswer;
-                SamdanDashboard.showDashboard();
+                passAnswer = rs.getString("sifre");
+                authAnswer = rs.getString("yetkiSeviyesi");
+
+                if (null == passAnswer) {
+                    // throw error "wrong password or username"
+                    popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
+                } else if (!passWord.equals(passAnswer)) {
+                    // throw error "wrong password or username"
+                    popUpMakerOK(gui, "Error: Yanlis kullanici adi veya sifre", "Yanlis kullanici adi veya sifre");
+                } else if (null == authAnswer) {
+                    // throw error "user's auth level couldn't be found"
+                    popUpMakerOK(gui, "Error: Yetki seviyesi bulunamadi", "Yetki seviyesi bulunamadi");
+                } else {
+                    username = userName;
+                    authorisation = authAnswer;
+                    SamdanDashboard.showDashboard();
+                }
             }
 
             rs.close();
