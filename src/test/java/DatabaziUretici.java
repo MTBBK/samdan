@@ -358,29 +358,19 @@ public class DatabaziUretici {
         }
     }
 
-    // 5,000 books x 2 authors = 10,000 rows
+    // 5,000 books x 1 author = 5,000 rows
     private static int seedYazariOlma(Connection conn, MasterKeys keys) throws SQLException {
         String sql = "INSERT IGNORE INTO YAZARI_OLMA (kitapISBN, yazarNumarasi) VALUES (?, ?)";
         int totalRows = 0;
         int yazarCount = keys.yazarIds.size();
-
+    
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (int i = 0; i < keys.kitapIsbns.size(); i++) {
-                String isbn = keys.kitapIsbns.get(i);
-                int primaryAuthor = keys.yazarIds.get(i % yazarCount);
-                int coAuthor = keys.yazarIds.get((i + 1) % yazarCount);
-
-                ps.setString(1, isbn);
-                ps.setInt(2, primaryAuthor);
+                ps.setString(1, keys.kitapIsbns.get(i));
+                ps.setInt(2, keys.yazarIds.get(i % yazarCount));
                 ps.addBatch();
-                totalRows++;
-
-                ps.setString(1, isbn);
-                ps.setInt(2, coAuthor);
-                ps.addBatch();
-                totalRows++;
-
-                if (totalRows % BATCH_SIZE == 0) ps.executeBatch();
+    
+                if (++totalRows % BATCH_SIZE == 0) ps.executeBatch();
             }
             ps.executeBatch();
         }
