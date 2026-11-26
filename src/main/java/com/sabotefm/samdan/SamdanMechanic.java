@@ -619,12 +619,40 @@ public class SamdanMechanic {
             Statement stmt = con.createStatement();
             // working code above
 
-            // TODO: add a query that gets `kitapISBN, kitapAdi, yazarAdi, yayineviAdi,
-            // kitapTuru, kitapSayfaSayisi` attributes in the given order, filtering for the
-            // attributes (String yazarAdi, String yayineviAdi, String kutuphaneAdi, String
-            // kitapTuru) if they exist. They come as "0" if they don't exist.
+            String query = "SELECT K.kitapISBN, K.kitapAdi, B.yazarAdi, Z.yayineviAdi, K.kitapTuru, K.kitapSayfaSayisi\n"
+                    +
+                    "FROM KITAP K\n" +
+                    "INNER JOIN YAZARI_OLMA Y ON K.kitapISBN = Y.kitapISBN\n" +
+                    "INNER JOIN YAZAR B ON B.yazarNumarasi = Y.yazarNumarasi\n" +
+                    "INNER JOIN YAYINEVI_OLMA X ON K.kitapISBN = X.kitapISBN\n" +
+                    "INNER JOIN YAYINEVI Z ON X.yayineviNumarasi = Z.yayineviNumarasi\n" +
+                    "INNER JOIN KUTUPHANE_BULUNMA KB ON K.kitapISBN = KB.kitapISBN\n" +
+                    "INNER JOIN KUTUPHANE KP ON KB.kutuphaneNumarasi = KP.kutuphaneNumarasi\n";
 
-            String query = "";
+            String cond = "WHERE";
+
+            if (!"0".equals(kitapAdi)) {
+                cond += " K.kitapAdi LIKE '%" + kitapAdi + "%'";
+            } else {
+                cond += " K.kitapAdi LIKE '%'";
+            }
+            if (!"0".equals(yazarAdi)) {
+                cond += " AND B.yazarAdi LIKE '%" + yazarAdi + "%'";
+            }
+            if (!"0".equals(yayineviAdi)) {
+                cond += " AND Z.yayineviAdi LIKE '%" + yayineviAdi + "%'";
+            }
+            if (!"0".equals(kutuphaneAdi)) {
+                cond += " AND KP.kutuphaneAdi LIKE '%" + kutuphaneAdi + "%'";
+            }
+            if (!"Hepsi".equals(kitapTuru)) {
+                cond += " AND K.kitapTuru LIKE '%" + kitapTuru + "%'";
+            }
+            cond += "\nGROUP BY K.kitapISBN, K.kitapAdi, B.yazarAdi, Z.yayineviAdi, K.kitapTuru, K.kitapSayfaSayisi";
+
+            cond += ";";
+
+            query += cond;
 
             // working code below
             rs = stmt.executeQuery(query);
