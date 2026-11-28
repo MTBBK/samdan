@@ -739,18 +739,64 @@ public class SamdanMechanic {
     }
 
     // Handle marking a book as acquired by the user (Kitap Edinme)
-    public static void markBookAsBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
-        if (selectedIsbn == null) {
+    public static void markBookAsBorrowed(WindowBasedTextGUI gui, String kitapISBN, String kullaniciAdi,
+            String kutuphaneNumarasi) {
+        if (kitapISBN == null) {
             String title = "Seçim Hatası";
             String message = "Lütfen tablodan işlem yapmak için bir kitap seçin.";
             popUpMakerOK(gui, title, message);
             return;
         }
-        // TODO: Insert/Update record in user ownership database relation
+
+        try {
+
+            establishConnection();
+            Statement stat = con.createStatement();
+
+            String query = """
+                    SELECT KB.kopyaNumarasi
+                    FROM KUTUPHANE_BULUNMA KB
+                    LEFT JOIN ARIYET A
+                        ON KB.kitapISBN = A.kitapISBN
+                        AND KB.kopyaNumarasi = A.kopyaNumarasi
+                        AND KB.kutuphaneNumarasi = A.kutuphaneNumarasi
+                    WHERE KB.kitapISBN='""" + kitapISBN + """
+                    ' AND KB.kutuphaneNumarasi='""" + kutuphaneNumarasi + """
+                    ' AND A.kopyaNumarasi IS NULL;""";
+            ResultSet rs = stat.executeQuery(query);
+
+            String kopyaNumarasi = null;
+
+            if (rs.next()) {
+                kopyaNumarasi = rs.getString(1);
+            } else {
+                popUpMakerOK(gui, "Error", "Bu kitabın ödünç alınabilir bir kopyası bulunamadı");
+                return;
+            }
+
+            String insertQuery = """
+                    INSERT INTO ARIYET (kitapISBN, kopyaNumarasi, kutuphaneNumarasi, kullaniciAdi)
+                    VALUES (?, ?, ?, ?);""";
+            PreparedStatement ps = con.prepareStatement(insertQuery);
+
+            ps.setString(1, kitapISBN);
+            ps.setString(2, kopyaNumarasi);
+            ps.setString(3, kutuphaneNumarasi);
+            ps.setString(4, kullaniciAdi);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+            return;
+        }
 
         // Kitabı kişiye ekle
         String title = "Başarılı";
-        String message = "Seçilen kitap (ISBN: " + selectedIsbn + ") edindiğiniz olarak işaretlendi.";
+        String message = "Seçilen kitap (ISBN: " + kitapISBN + ") edindiğiniz olarak işaretlendi.";
         popUpMakerOK(gui, title, message);
     }
 
