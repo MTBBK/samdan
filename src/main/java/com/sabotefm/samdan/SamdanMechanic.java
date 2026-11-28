@@ -741,10 +741,18 @@ public class SamdanMechanic {
     // Handle marking a book as acquired by the user (Kitap Edinme)
     public static void markBookAsBorrowed(WindowBasedTextGUI gui, String kitapISBN, String kullaniciAdi,
             String kutuphaneNumarasi) {
-        if (kitapISBN == null) {
-            String title = "Seçim Hatası";
-            String message = "Lütfen tablodan işlem yapmak için bir kitap seçin.";
-            popUpMakerOK(gui, title, message);
+
+        boolean flag = false;
+        if ("0".equals(kullaniciAdi)) {
+            flag = true;
+        } else if ("0".equals(kitapISBN)) {
+            flag = true;
+        } else if ("0".equals(kutuphaneNumarasi)) {
+            flag = true;
+        }
+
+        if (flag) {
+            popUpMakerOK(gui, "Hata", "Tüm bilgiler dolu olmalı.");
             return;
         }
 
@@ -800,7 +808,7 @@ public class SamdanMechanic {
         popUpMakerOK(gui, title, message);
     }
 
-    // Check who owns the book right now (Ariyet)
+    // Check all those who borrow the book right now (Ariyet)
     public static void checkWhoBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         if (selectedIsbn == null) {
             String title = "Seçim Hatası";
@@ -823,6 +831,49 @@ public class SamdanMechanic {
         String title = "Ariyet Durumu";
         String message = messageToShow;
         popUpMakerOK(gui, title, message);
+    }
+
+    public static void returnBook(WindowBasedTextGUI gui, String kitapISBN, String kullaniciAdi,
+            String kutuphaneNumarasi) {
+        boolean flag = false;
+        if ("0".equals(kullaniciAdi)) {
+            flag = true;
+        } else if ("0".equals(kitapISBN)) {
+            flag = true;
+        } else if ("0".equals(kutuphaneNumarasi)) {
+            flag = true;
+        }
+
+        if (flag) {
+            popUpMakerOK(gui, "Hata", "Tüm bilgiler dolu olmalı.");
+            return;
+        }
+
+        try {
+
+            establishConnection();
+
+            String deleteQuery = """
+                    DELETE FROM ARIYET
+                    WHERE kitapISBN = ? AND kullaniciAdi = ? AND kutuphaneNumarasi = ?
+                    LIMIT 1;""";
+
+            PreparedStatement ps = con.prepareStatement(deleteQuery);
+
+            ps.setString(1, kitapISBN);
+            ps.setString(2, kullaniciAdi);
+            ps.setString(3, kutuphaneNumarasi);
+
+            ps.execute();
+
+            ps.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+            return;
+        }
+
     }
 
     public static String getWhoBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {

@@ -5,3 +5,4 @@ Front End:
 - Profil sayfasını düzelt.
 - Yöneticide yetki seviyesini seçmeli liste yap (Okur ve Gorevli).
 - Programı kapatmayı düzelt.
+- Yönetici paneline ödünç almayı ve iade etmeyi (SamdanMechanic.returnBook) ekle.
