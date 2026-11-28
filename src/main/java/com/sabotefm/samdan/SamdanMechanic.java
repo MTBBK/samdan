@@ -688,7 +688,54 @@ public class SamdanMechanic {
 
     public static void addNewUser(WindowBasedTextGUI gui, String kullaniciAdi, String gercekAdi, String sifre,
             String yetkiSeviyesi, String okurYasi, String TCNO) {
-        // Function to add new user to database
+        // Function to add new user to the KULLANICI table
+        // Every string directly maps to the attribute that has the same name
+
+        boolean flag = false;
+        if ("0".equals(kullaniciAdi)) {
+            flag = true;
+        } else if ("0".equals(gercekAdi)) {
+            flag = true;
+        } else if ("0".equals(sifre)) {
+            flag = true;
+        } else if ("0".equals(yetkiSeviyesi)) {
+            flag = true;
+        } else if ("0".equals(okurYasi)) {
+            flag = true;
+        } else if ("0".equals(TCNO)) {
+            flag = true;
+        }
+
+        if (flag) {
+            popUpMakerOK(gui, "Hata", "Tüm bilgiler dolu olmalı.");
+            return;
+        }
+
+        try {
+            establishConnection();
+
+            PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO KULLANICI (kullaniciAdi, gercekAdi, sifre, yetkiSeviyesi, okurYasi, TCNO) " +
+                            "VALUES (?, ?, ?, ?, ?, ?)");
+
+            ps.setString(1, kullaniciAdi);
+            ps.setString(2, gercekAdi);
+            ps.setString(3, sifre);
+            ps.setString(4, yetkiSeviyesi);
+            ps.setString(5, okurYasi);
+            ps.setString(6, TCNO);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+        } catch (SQLException e) {
+            String SQL_STATE = e.getSQLState();
+            popUpMakerOK(gui, "Error: " + SQL_STATE, e.getMessage());
+            return;
+        }
+
+        popUpMakerOK(gui, "İşlem Başarılı!", "Kullanıcı: '" + kullaniciAdi + "' sisteme eklendi.");
     }
 
     // Handle marking a book as acquired by the user (Kitap Edinme)
