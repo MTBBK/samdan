@@ -4,14 +4,18 @@ import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.gui2.table.TableModel;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class SamdanMechanic {
 
     // for database connection
-    private static String url = "jdbc:mysql://localhost:3306/samdan_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true";
-    private static String databaseUser = "kutuphane-admin";
-    private static String databasePassword = "Passw0rd..";
+    private static String databaseURL;
+    private static String databaseUser;
+    private static String databasePassword;
     private static Connection con;
 
     // for user information
@@ -874,40 +878,14 @@ public class SamdanMechanic {
             return;
         }
 
+        String title = "Başarılı";
+        String message = "Seçilen kitap (ISBN: " + kitapISBN + ") iade edilmiştir.";
+        popUpMakerOK(gui, title, message);
+
     }
 
     public static String getWhoBorrowed(WindowBasedTextGUI gui, String selectedIsbn) {
         return null;
-    }
-
-    // View or write reviews/comments (Değerlendirmeler)
-    public static void openReviews(WindowBasedTextGUI gui, String selectedIsbn) {
-        if (selectedIsbn == null) {
-            String title = "Seçim Hatası";
-            String message = "Lütfen tablodan bir kitap seçin.";
-            popUpMakerOK(gui, title, message);
-            return;
-        }
-        // TODO: Query reviews/comments table for this book
-
-        // Değerlendirme Yoksa Bu Koşul
-        String title = "Değerlendirmeler";
-        String message = "Bu kitap için henüz yorum girilmemiş.\n(ISBN: " + selectedIsbn + ")";
-        popUpMakerOK(gui, title, message);
-
-        // Değerlendirme varsa bu koşul
-        SamdanDegerlendirmeler.showDegerlendirmeler(selectedIsbn);
-    }
-
-    // Go to Book Information Page
-    public static void openBookInformation(WindowBasedTextGUI gui, String selectedIsbn) {
-        if (selectedIsbn == null) {
-            String title = "Seçim Hatası";
-            String message = "Lütfen tablodan bir kitap seçin.";
-            popUpMakerOK(gui, title, message);
-            return;
-        }
-        SamdanKitap.showKitap(selectedIsbn);
     }
 
     public static void popUpMakerOK(WindowBasedTextGUI gui, String title, String message) {
@@ -928,8 +906,6 @@ public class SamdanMechanic {
                 .showDialog(gui);
     }
 
-    // TODO: Establish connection to the database
-
     // https://www.geeksforgeeks.org/java/jdbc-tutorial/
     private static void establishConnection() {
 
@@ -937,11 +913,13 @@ public class SamdanMechanic {
             return;
         }
 
+        getDatabaseUser();
+
         Connection connection = null;
 
         try {
             // Establish Connection
-            connection = DriverManager.getConnection(url, databaseUser, databasePassword);
+            connection = DriverManager.getConnection(databaseURL, databaseUser, databasePassword);
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             System.out.println("SQL State: " + e.getSQLState());
@@ -953,6 +931,37 @@ public class SamdanMechanic {
     }
 
     private static void getDatabaseUser() {
-        // TODO: gets database user's username and password with some dark magic
+        if (null == databaseURL || null == databaseUser || null == databasePassword) {
+            databaseURL = ConfigLoader.get("database-url");
+            databaseUser = ConfigLoader.get("database-user");
+            databasePassword = ConfigLoader.get("password");
+        }
+    }
+
+    class ConfigLoader {
+        private static final Properties properties = new Properties();
+
+        static {
+            try (InputStream input = ConfigLoader.class.getClassLoader().getResourceAsStream("config.properties")) {
+                if (input == null) {
+                    throw new RuntimeException("Unable to find config.properties in src/main/resources");
+                }
+                properties.load(input);
+            } catch (IOException ex) {
+                throw new RuntimeException("Failed to load config.properties", ex);
+            }
+        }
+
+        public static String get(String key) {
+            // 1. Check real OS environment variables first (e.g., DATABASE_URL)
+            String envKey = key.toUpperCase().replace('-', '_');
+            String envValue = System.getenv(envKey);
+            if (envValue != null && !envValue.isBlank()) {
+                return envValue;
+            }
+
+            // 2. Fall back to config.properties (e.g., database-url)
+            return properties.getProperty(key);
+        }
     }
 }

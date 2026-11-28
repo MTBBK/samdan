@@ -4,3 +4,4 @@ target*
 DatabaseConnection*
 .env
 db-setup*
+src/main/resources/config.properties
